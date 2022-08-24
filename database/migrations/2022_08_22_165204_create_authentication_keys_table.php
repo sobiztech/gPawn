@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('authentication_keys', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('authentication_key_name');
             $table->string('route');
             $table->longText('description')->nullable();
             $table->timestamps();

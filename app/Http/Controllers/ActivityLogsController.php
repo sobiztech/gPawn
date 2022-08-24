@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\payment_types;
+use App\Models\activity_logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PaymentTypesController extends Controller
+class ActivityLogsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,19 @@ class PaymentTypesController extends Controller
      */
     public function index()
     {
-        $paymentType=DB::table('payment_types')
-        ->select('payment_types.id', 
-        'payment_types.payment_type_name', 
-        'payment_types.description');
-        
-        return $paymentType;
+        $activityLog=DB::table('activity_logs')
+        ->select('activity_logs.id', 
+        'activity_logs.date', 
+        'activity_logs.action',
+        'users.id AS uID',
+        'employees.id AS eID', 
+        'employees.employee_number', 
+        'employees.employee_first_name', 
+        'employees.employee_sur_name')
+        ->join('users','activity_logs.user_id', '=', 'users.id')
+        ->join('employees','activity_logs.employee_id', '=', 'employees.id');
+
+        return $activityLog;
     }
 
     /**
@@ -41,32 +48,16 @@ class PaymentTypesController extends Controller
      */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
-
-        $paymentType=new payment_types();
-        $paymentType->payment_type_name=$request->input('payment_type_name');
-        $paymentType->description=$request->input('description');
-
-        if($id)
-        {
-            $paymentType=payment_types::find($id);
-            $paymentType->save();
-        }
-        else
-        {
-            $paymentType->save();
-        }
-        return $paymentType;
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\payment_types  $payment_types
+     * @param  \App\Models\activity_logs  $activity_logs
      * @return \Illuminate\Http\Response
      */
-    public function show(payment_types $payment_types)
+    public function show(activity_logs $activity_logs)
     {
         //
     }
@@ -74,10 +65,10 @@ class PaymentTypesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\payment_types  $payment_types
+     * @param  \App\Models\activity_logs  $activity_logs
      * @return \Illuminate\Http\Response
      */
-    public function edit(payment_types $payment_types)
+    public function edit(activity_logs $activity_logs)
     {
         //
     }
@@ -86,10 +77,10 @@ class PaymentTypesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\payment_types  $payment_types
+     * @param  \App\Models\activity_logs  $activity_logs
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, payment_types $payment_types)
+    public function update(Request $request, activity_logs $activity_logs)
     {
         //
     }
@@ -97,10 +88,10 @@ class PaymentTypesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\payment_types  $payment_types
+     * @param  \App\Models\activity_logs  $activity_logs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(payment_types $payment_types)
+    public function destroy(activity_logs $activity_logs)
     {
         //
     }

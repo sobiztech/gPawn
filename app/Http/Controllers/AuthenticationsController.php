@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\authentications;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticationsController extends Controller
 {
@@ -14,7 +15,15 @@ class AuthenticationsController extends Controller
      */
     public function index()
     {
-        //
+        $authentication=DB::table('authentications')
+        ->select('authentications.id', 
+        'authentications.permisions', 
+        'roles.id AS roleID', 
+        'roles.role_name', 
+        'roles.description')
+        ->join('roles','authentications.role_id', '=', 'roles.id');
+
+        return $authentication;
     }
 
     /**
@@ -35,7 +44,23 @@ class AuthenticationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $authentication=new authentications();
+        $authentication->role_id=$request->input('role_id');
+        $authentication->authentication_keys_id=$request->input('authentication_keys_id');
+
+        if($id)
+        {
+            $authentication=authentications::find($id);
+            $authentication->save();
+        }
+        else
+        {
+            $authentication->save();
+        }
+        return $authentication;
     }
 
     /**

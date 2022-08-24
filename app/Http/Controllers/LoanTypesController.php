@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\loan_types;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoanTypesController extends Controller
 {
@@ -14,7 +15,12 @@ class LoanTypesController extends Controller
      */
     public function index()
     {
-        //
+        $loanType=DB::table('loan_types')
+        ->select('loan_types.id',
+        'loan_types.loan_type_name', 
+        'loan_types.description');
+
+        return $loanType;
     }
 
     /**
@@ -35,7 +41,23 @@ class LoanTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $loanType=new loan_types();
+        $loanType->loan_type_name=$request->input('loan_type_name');
+        $loanType->description=$request->input('description');
+
+        if($id)
+        {
+            $loanType=loan_types::find($id);
+            $loanType->save();
+        }
+        else
+        {
+            $loanType->save();
+        }
+        return $loanType;
     }
 
     /**

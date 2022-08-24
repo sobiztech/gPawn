@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\properties;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PropertiesController extends Controller
 {
@@ -14,7 +15,15 @@ class PropertiesController extends Controller
      */
     public function index()
     {
-        //
+        $property=DB::table('authentication_keys')
+        ->select('properties.id', 
+        'properties.property_name', 
+        'properties.phone_number', 
+        'properties.email', 
+        'properties.location', 
+        'properties.description');
+
+        return $property;
     }
 
     /**
@@ -35,7 +44,27 @@ class PropertiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $property=new properties();
+        $property->properties_name=$request->input('date');
+        $property->phone_number=$request->input('customer_id');
+        $property->email=$request->input('invoice_no');
+        $property->location=$request->input('amount');
+        $property->is_active=$request->input('payment_type_id');
+        $property->description=$request->input('description');
+
+        if($id)
+        {
+            $property=properties::find($id);
+            $property->save();
+        }
+        else
+        {
+            $property->save();
+        }
+        return $property;
     }
 
     /**

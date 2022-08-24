@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\customer_types;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerTypesController extends Controller
 {
@@ -14,7 +15,12 @@ class CustomerTypesController extends Controller
      */
     public function index()
     {
-        //
+        $customerType=DB::table('customer_types')
+        ->select('customer_types.id', 
+        'customer_types.customer_type_name', 
+        'customer_types.description');
+
+        return $customerType;
     }
 
     /**
@@ -35,7 +41,23 @@ class CustomerTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $customerType=new customer_types();
+        $customerType->customer_type_name=$request->input('customer_type_name');
+        $customerType->description=$request->input('description');
+
+        if($id)
+        {
+            $customerType=customer_types::find($id);
+            $customerType->save();
+        }
+        else
+        {
+            $customerType->save();
+        }
+        return $customerType;
     }
 
     /**

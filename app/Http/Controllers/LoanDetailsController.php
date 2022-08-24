@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\loan_details;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoanDetailsController extends Controller
 {
@@ -14,7 +15,18 @@ class LoanDetailsController extends Controller
      */
     public function index()
     {
-        //
+        $loanDetail=DB::table('loan_details')
+        ->select('loan_details.id', 
+        'loan_details.amount', 
+        'loan_details.status', 
+        'loan_details.description',
+        'loans.id AS lID', 
+        'loans.date', 
+        'loans.amount AS lAmount', 
+        'loans.period')
+        ->join('loans','loan_details.loan_id', '=', 'loans.id');
+
+        return $loanDetail;
     }
 
     /**
@@ -35,7 +47,26 @@ class LoanDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $loanDetail=new loan_details();
+        $loanDetail->month=$request->input('month');
+        $loanDetail->loan_id=$request->input('loan_id');
+        $loanDetail->amount=$request->input('amount');
+        $loanDetail->status=$request->input('status');
+        $loanDetail->description=$request->input('description');
+
+        if($id)
+        {
+            $loanDetail=loan_details::find($id);
+            $loanDetail->save();
+        }
+        else
+        {
+            $loanDetail->save();
+        }
+        return $loanDetail;
     }
 
     /**
