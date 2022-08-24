@@ -17,11 +17,11 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('employee_id')->unique()->unsigned();
             $table->string('password');
-            $table->integer('authentication_id')->unsigned();
+            // $table->integer('authentication_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('authentication_id')->references('id')->on('authentications')->onDelete('cascade');
+            // $table->foreign('authentication_id')->references('id')->on('authentications')->onDelete('cascade');
 
             // $table->id();
             // $table->string('name');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\payments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentsController extends Controller
 {
@@ -14,7 +15,29 @@ class PaymentsController extends Controller
      */
     public function index()
     {
-        //
+        $payment=DB::table('payments')
+        ->select('payments.id',
+        'payments.date', 
+        'payments.invoice_no', 
+        'payments.amount', 
+        'payments.description',
+        'payment_types.id AS pTID', 
+        'payment_types.payment_type_name',
+        'customers.id AS cID', 
+        'customers.customer_number', 
+        'customers.customer_first_name', 
+        'customers.customer_sur_name',
+        'users.id AS uID', 
+        'employees.id AS eID', 
+        'employees.employee_number', 
+        'employees.employee_first_name', 
+        'employees.employee_sur_name')
+        ->join('payment_types','payments.payment_type_id', '=', 'payment_types.id')
+        ->join('customers','payments.customer_id', '=', 'customers.id')
+        ->join('users','payments.user_id', '=', 'users.id')
+        ->join('employees','users.employee_id', '=', 'employees.id');
+
+        return $payment;
     }
 
     /**
@@ -35,7 +58,28 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $payment=new payments();
+        $payment->date=$request->input('date');
+        $payment->customer_id=$request->input('customer_id');
+        $payment->invoice_no=$request->input('invoice_no');
+        $payment->amount=$request->input('amount');
+        $payment->payment_type_id=$request->input('payment_type_id');
+        $payment->user_id=$request->input('user_id');
+        $payment->description=$request->input('description');
+
+        if($id)
+        {
+            $payment=payments::find($id);
+            $payment->save();
+        }
+        else
+        {
+            $payment->save();
+        }
+        return $payment;
     }
 
     /**

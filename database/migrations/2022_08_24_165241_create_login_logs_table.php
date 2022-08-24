@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('properties', function (Blueprint $table) {
+        Schema::create('login_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('property_name');
-            $table->integer('phone_number')->uniqiue()->nullable();
-            $table->string('email',50)->uniqiue()->nullable();
-            $table->longText('location');
-            $table->longText('description')->nullable();
+            $table->date('date');
+            $table->string('status');
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('properties');
+        Schema::dropIfExists('login_logs');
     }
 };

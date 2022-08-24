@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\roles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
 {
@@ -14,7 +15,12 @@ class RolesController extends Controller
      */
     public function index()
     {
-        //
+        $role=DB::table('roles')
+        ->select('roles.id', 
+        'roles.role_name', 
+        'roles.description');
+
+        return $role;
     }
 
     /**
@@ -35,7 +41,23 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $role=new roles();
+        $role->role_name=$request->input('date');
+        $role->description=$request->input('description');
+
+        if($id)
+        {
+            $role=roles::find($id);
+            $role->save();
+        }
+        else
+        {
+            $role->save();
+        }
+        return $role;
     }
 
     /**

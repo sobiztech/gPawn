@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\authentication_keys;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticationKeysController extends Controller
 {
@@ -14,7 +15,13 @@ class AuthenticationKeysController extends Controller
      */
     public function index()
     {
-        //
+        $authenticationKey=DB::table('authentication_keys')
+        ->select('authentication_keys.id', 
+        'authentication_keys.authentication_key_name', 
+        'authentication_keys.route', 
+        'authentication_keys.description');
+
+        return $authenticationKey;
     }
 
     /**
@@ -35,7 +42,24 @@ class AuthenticationKeysController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+        
+        $authenticationKey=new authentication_keys();
+        $authenticationKey->authentication_key_name=$request->input('authentication_key_name');
+        $authenticationKey->route=$request->input('route');
+        $authenticationKey->description=$request->input('description');
+
+        if($id)
+        {
+            $authenticationKey=authentication_keys::find($id);
+            $authenticationKey->save();
+        }
+        else
+        {
+            $authenticationKey->save();
+        }
+        return $authenticationKey;
     }
 
     /**

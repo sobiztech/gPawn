@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\black_list_types;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BlackListTypesController extends Controller
 {
@@ -14,7 +15,12 @@ class BlackListTypesController extends Controller
      */
     public function index()
     {
-        //
+        $blackListType=DB::table('black_list_types')
+        ->select('black_list_types.id', 
+        'black_list_types.black_list_type_name', 
+        'black_list_types.description');
+
+        return $blackListType;
     }
 
     /**
@@ -35,7 +41,24 @@ class BlackListTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $blackListType=new black_list_types();
+        $blackListType->black_list_type_name=$request->input('black_list_type_name');
+        $blackListType->description=$request->input('description');
+
+        if($id)
+        {
+            $blackListType=black_list_types::find($id);
+            $blackListType->save();
+        }
+        else
+        {
+            $blackListType->save();
+        }
+
+        return $blackListType;
     }
 
     /**

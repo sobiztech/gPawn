@@ -17,14 +17,13 @@ return new class extends Migration
             $table->increments('id');
             $table->string('department_number')->uniqiue();
             $table->string('department_name');
-            $table->integer('properties_id')->unsigned();
+            $table->integer('property_id')->unsigned();
             $table->integer('phone_number')->uniqiue()->nullable();
             $table->string('email',50)->uniqiue()->nullable();
             $table->longText('location');
-            $table->integer('is_active');
             $table->longText('description')->nullable();
             $table->timestamps();
-            $table->foreign('properties_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\settings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
@@ -14,7 +15,13 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        //
+        $setting=DB::table('settings')
+        ->select('settings.id',
+        'settings.key_name', 
+        'settings.key_value', 
+        'settings.description');
+
+        return $setting;
     }
 
     /**
@@ -35,7 +42,24 @@ class SettingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $setting=new settings();
+        $setting->key_name=$request->input('key_name');
+        $setting->key_value=$request->input('key_value');
+        $setting->description=$request->input('description');
+
+        if($id)
+        {
+            $setting=settings::find($id);
+            $setting->save();
+        }
+        else
+        {
+            $setting->save();
+        }
+        return $setting;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\loans;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoansController extends Controller
 {
@@ -14,7 +15,30 @@ class LoansController extends Controller
      */
     public function index()
     {
-        //
+        $loan=DB::table('loans')
+        ->select('loans.id', 
+        'loans.date', 
+        'loans.amount', 
+        'loans.period', 
+        'loans.description', 
+        'customers.id AS cID', 
+        'customers.customer_number', 
+        'customers.customer_first_name', 
+        'customers.customer_sur_name',
+        'loan_types.id AS lTID', 
+        'loan_types.loan_type_name', 
+        'users.id AS uID', 
+        'users.id',
+        'employees.id AS eID', 
+        'employees.employee_number', 
+        'employees.employee_first_name', 
+        'employees.employee_sur_name')
+        ->join('customers','loans.customer_id', '=', 'customers.id')
+        ->join('loan_types','loans.loan_type_id', '=', 'loan_types.id')
+        ->join('users','loans.user_id', '=', 'users.id')
+        ->join('employees','loans.employee_id', '=', 'employees.id');
+
+        return $loan;
     }
 
     /**
@@ -35,7 +59,28 @@ class LoansController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id=0;
+        $id=$request->id;
+
+        $loan=new loans();
+        $loan->date=$request->input('date');
+        $loan->customer_id=$request->input('customer_id');
+        $loan->amount=$request->input('amount');
+        $loan->period=$request->input('period');
+        $loan->loan_type_id=$request->input('loan_type_id');
+        $loan->user_id=$request->input('user_id');
+        $loan->description=$request->input('description');
+
+        if($id)
+        {
+            $loan=loans::find($id);
+            $loan->save();
+        }
+        else
+        {
+            $loan->save();
+        }
+        return $loan;
     }
 
     /**
