@@ -2,7 +2,7 @@
         <a href="#top" id="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
 
         <!-- JQUERY JS -->
-        <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+        {{-- <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script> --}}
 
         <!-- BOOTSTRAP JS -->
         <script src="{{asset('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
@@ -25,3 +25,7 @@
 
         <!-- CUSTOM JS -->
         <script src="{{asset('assets/js/custom.js')}}"></script>
+
+        <!-- DATA TABLE JS-->
+        <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.js') }}"></script>

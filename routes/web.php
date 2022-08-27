@@ -30,9 +30,9 @@ use App\Http\Controllers\SettingsController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('pages.index');
-// });
+Route::get('/', function () {
+    return view('pages.index');
+});
 // Route::get('/index', [IndexController::class, 'index'])->name('index');
 
 //store and update
@@ -40,7 +40,7 @@ Route::get('authenticationkey/store', [AuthenticationKeysController::class, 'sto
 Route::get('authentication/store', [AuthenticationsController::class, 'store'])->name('authentication.store');
 Route::get('blacklist/store', [BlackListsController::class, 'store'])->name('blacklist.store');
 Route::get('blacklisttype/store', [BlackListTypesController::class, 'store'])->name('blacklisttype.store');
-Route::get('customer/store', [CustomersController::class, 'store'])->name('customer.store');
+
 Route::get('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
 Route::get('department/store', [departmentsController::class, 'store'])->name('department.store');
 Route::get('employee/store', [EmployeesController::class, 'store'])->name('employee.store');
@@ -57,7 +57,6 @@ Route::get('authenticationkey/show', [AuthenticationKeysController::class, 'inde
 Route::get('authentication/show', [AuthenticationsController::class, 'index'])->name('authentication.index');
 Route::get('blacklist/show', [BlackListsController::class, 'index'])->name('blacklist.index');
 Route::get('blacklisttype/show', [BlackListTypesController::class, 'index'])->name('blacklisttype.index');
-Route::get('customer/show', [CustomersController::class, 'index'])->name('customer.index');
 Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name('customertype.index');
 Route::get('department/show', [departmentsController::class, 'index'])->name('department.index');
 Route::get('employee/show', [EmployeesController::class, 'index'])->name('employee.index');
@@ -68,3 +67,30 @@ Route::get('payment/show', [PaymentsController::class, 'index'])->name('payment.
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
 Route::get('role/show', [RolesController::class, 'index'])->name('role.index');
 Route::get('setting/show', [SettingsController::class, 'index'])->name('setting.index');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// customer
+Route::get('customer/index', [CustomersController::class, 'index'])->name('customer.index');
+Route::post('customer/store', [CustomersController::class, 'store'])->name('customer.store');
+Route::get('customer/status-change', [CustomersController::class, 'statusChange'])->name('customer.status-change');
