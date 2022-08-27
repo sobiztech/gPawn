@@ -1,6 +1,6 @@
 
 		<!-- TITLE -->
-		<title>gTourism</title>
+		<title>gpawn</title>
 
         <!-- FAVICON -->
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/logo-2.png')}}" />
@@ -16,3 +16,6 @@
 
         <!--- FONT-ICONS CSS -->
         <link href="{{asset('assets/plugins/icons/icons.css')}}" rel="stylesheet" />
+
+        <!-- JQUERY JS -->
+        <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>

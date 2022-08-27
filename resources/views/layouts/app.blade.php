@@ -36,8 +36,39 @@
 
                         <!-- CONTAINER -->
                         <div class="main-container container-fluid">
+                            {{-- session --}}
+                        @if (\Session::has('success'))
+                        <div class="alert alert-success session-msg"
+                            style="width: 50%; margin:0 auto 15px auto; text-align:center;">
+                            <p>{{ \Session::get('success') }}</p>
+                        </div>
 
-                                @yield('content')
+                        <script>
+                            $(function() {
+                                setTimeout(function() {
+                                    $('.session-msg').slideUp();
+                                }, 5000);
+                            });
+                        </script>
+                    @endif
+
+                    @if (\Session::has('error'))
+                        <div class="alert alert-danger session-msg"
+                            style="width: 50%; margin:0 auto 15px auto; text-align:center;">
+                            <p>{{ \Session::get('error') }}</p>
+                        </div>
+
+                        <script>
+                            $(function() {
+                                setTimeout(function() {
+                                    $('.session-msg').slideUp();
+                                }, 5000);
+                            });
+                        </script>
+                    @endif
+                    {{-- session end --}}
+
+                            @yield('content')
 
                         </div>
                     </div>
