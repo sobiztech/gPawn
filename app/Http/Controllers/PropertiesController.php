@@ -8,105 +8,63 @@ use Illuminate\Support\Facades\DB;
 
 class PropertiesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $property=DB::table('authentication_keys')
+       
+        $properties=DB::table('properties')
         ->select('properties.id', 
         'properties.property_name', 
         'properties.phone_number', 
         'properties.email', 
         'properties.location', 
-        'properties.description');
+        'properties.description')
+        ->get();
 
-        return $property;
+        return view('pages.property', compact('properties'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $property=new properties();
-        $property->properties_name=$request->input('date');
-        $property->phone_number=$request->input('customer_id');
-        $property->email=$request->input('invoice_no');
-        $property->location=$request->input('amount');
-        $property->is_active=$request->input('payment_type_id');
-        $property->description=$request->input('description');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'email' => 'unique:properties,email',
+                'property_name' => 'required|min:10|max:12|unique:customers,property_name'
+            ]);
 
-        if($id)
-        {
-            $property=properties::find($id);
-            $property->save();
+            $property = new properties();
+
+        } else { // update
+            $this->validate($request, [
+                'email' => 'unique:properties,email,' .$id,
+                'property_name' => 'required|min:10|max:12|unique:customers,property_name,' .$id
+            ]);
+
+            $property = properties::find($id);
         }
-        else
-        {
+        
+        try {        
+            $property->property_name=$request->input('property_name');
+            $property->phone_number=$request->input('phone_number');
+            $property->email=$request->input('email');
+            $property->location=$request->input('location');
+            $property->description=$request->input('description');
             $property->save();
+
+            return redirect()->route('property.index')->with('success', 'Property ....');
+
+        } catch (\Throwable $th) {
+
+            return redirect()->route('property.index')->with('error', 'error ....');
         }
-        return $property;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\properties  $properties
-     * @return \Illuminate\Http\Response
-     */
-    public function show(properties $properties)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\properties  $properties
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(properties $properties)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\properties  $properties
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, properties $properties)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\properties  $properties
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(properties $properties)
     {
         //

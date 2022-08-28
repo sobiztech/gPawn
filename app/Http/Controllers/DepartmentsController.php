@@ -15,7 +15,7 @@ class departmentsController extends Controller
      */
     public function index()
     {
-        $department=DB::table('authentications')
+        $departments=DB::table('departments')
         ->select('departments.id', 
         'departments.department_number', 
         'departments.department_name', 
@@ -25,9 +25,12 @@ class departmentsController extends Controller
         'departments.description',
         'properties.id AS pID', 
         'properties.property_name')
-        ->join('properties','departments.property_id', '=', 'properties.id');
+        ->join('properties','departments.property_id', '=', 'properties.id')
+        ->get();
 
-        return $department;
+        $properties = DB::table('properties')->select('id', 'property_name')->get();
+
+        return view('pages.department', compact('departments', 'properties'));
     }
 
     /**
