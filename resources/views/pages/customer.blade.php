@@ -78,8 +78,7 @@
                                             data-customer_type_id="{{ $row->customer_type_id }}" >
                                                 <i style="color:rgb(226, 210, 210);cursor: pointer" class="fa fa-edit"></i>
                                             </a>
-                                        </td>
-                                        
+                                        </td>                      
                                     </tr>
                                 @endforeach
                             </tbody>
