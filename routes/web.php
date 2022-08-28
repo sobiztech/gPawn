@@ -88,23 +88,3 @@ Route::get('customer/status-change', [CustomersController::class, 'statusChange'
 //customer Type
 Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name('customertype.index');
 Route::get('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
