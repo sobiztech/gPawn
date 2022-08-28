@@ -61,10 +61,13 @@ Route::get('blacklisttype/store', [BlackListTypesController::class, 'store'])->n
 //loan
 Route::get('loantype/show', [LoanTypesController::class, 'index'])->name('loantype.index');
 Route::get('loantype/store', [LoanTypesController::class, 'store'])->name('loantype.store');
-Route::get('loan/show', [LoansController::class, 'index'])->name('loan.index');
-Route::get('loan/store', [LoansController::class, 'store'])->name('loan.store');
 Route::get('loandetail/show', [LoanDetailsController::class, 'index'])->name('loandetail.index');
 Route::get('loandetail/store', [LoanDetailsController::class, 'store'])->name('loandetail.store');
+Route::get('loan/index', [LoansController::class, 'index'])->name('loan.index');
+Route::get('loan/create', [LoansController::class, 'create'])->name('loan.create');
+Route::post('loan/store', [LoansController::class, 'store'])->name('loan.store');
+Route::get('loan/get-payment-detail', [LoansController::class, 'getLoanPaymentDetailAjax'])->name('loan.getLoanPaymentDetailAjax');
+
 
 //payment
 Route::get('paymenttype/show', [PaymentsController::class, 'index'])->name('paymenttype.index');
@@ -88,3 +91,4 @@ Route::get('customer/status-change', [CustomersController::class, 'statusChange'
 //customer Type
 Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name('customertype.index');
 Route::get('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
+
