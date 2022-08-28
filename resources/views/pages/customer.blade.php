@@ -153,7 +153,7 @@
                                     <label >Date of Birth<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                             value="{{ old('date_of_birth') }}" required max="1990-05-20"/>
+                                             value="{{ old('date_of_birth') }}" required max="{{ date('Y-m-d') }}"/>
                                         <p style="color:Tomato"> @error('date_of_birth'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
@@ -177,7 +177,7 @@
                                             <option value="1">Male</option>
                                             <option value="2">Female</option>
                                         </select>
-                                        <p style="color:Tomato"> @error('phone_number'){{ $message }} @enderror</p>
+                                        <p style="color:Tomato"> @error('gender'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                                             <option value="{{ $item->id }}" {{ (old('customer_type_id') == $item->id) ? 'selected' : '' }}>{{ $item->customer_type_name }}</option>
                                             @endforeach
                                         </select>
-                                        <p style="color:Tomato"> @error('phone_number'){{ $message }} @enderror</p>
+                                        <p style="color:Tomato"> @error('customer_type_id'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
                             </div>
