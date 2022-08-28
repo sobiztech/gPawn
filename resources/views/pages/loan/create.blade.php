@@ -199,7 +199,7 @@
 
 @section('scripts')
 <!-- SELECT2 JS -->
-<script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script> --}}
 
 <script>
     $(document).ready(function () {
