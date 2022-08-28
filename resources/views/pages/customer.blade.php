@@ -197,7 +197,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Address</label>
+                                    <label>Address<span class="text-danger">*</span></label>
                                     <div>
                                         <textarea type="text" class="form-control" rows="1" id="address"
                                             name="address"

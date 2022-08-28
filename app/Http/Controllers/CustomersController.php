@@ -45,13 +45,17 @@ class CustomersController extends Controller
         $id = $request->id;
 
         if ($id == 0) { // create
+            $request['customer_number'] = 'cus-' . rand(0,9) . date('ymdHis');
+
+
             $this->validate($request, [
                 'email' => 'unique:customers,email',
-                'nic' => 'required|min:10|max:12|unique:customers,nic'
+                'nic' => 'required|min:10|max:12|unique:customers,nic',
+                'customer_number' => 'required|unique:customers,customer_number'
             ]);
 
             $customer = new customers();
-            $customer->customer_number = 'cus-' . date('ymdsu');
+            $customer->customer_number = $request->customer_number;
             $customer->is_active = 1;
 
         } else { // update
