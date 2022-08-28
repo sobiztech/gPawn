@@ -45,7 +45,6 @@ Route::get('customertype/store', [CustomerTypesController::class, 'store'])->nam
 Route::get('department/store', [departmentsController::class, 'store'])->name('department.store');
 Route::get('employee/store', [EmployeesController::class, 'store'])->name('employee.store');
 Route::get('loandetail/store', [LoanDetailsController::class, 'store'])->name('loandetail.store');
-Route::get('loan/store', [LoansController::class, 'store'])->name('loan.store');
 Route::get('loantype/store', [LoanTypesController::class, 'store'])->name('loantype.store');
 Route::get('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
 Route::get('property/store', [PropertiesController::class, 'store'])->name('property.store');
@@ -61,7 +60,6 @@ Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name
 Route::get('department/show', [departmentsController::class, 'index'])->name('department.index');
 Route::get('employee/show', [EmployeesController::class, 'index'])->name('employee.index');
 Route::get('loandetail/show', [LoanDetailsController::class, 'index'])->name('loandetail.index');
-Route::get('loan/show', [LoansController::class, 'index'])->name('loan.index');
 Route::get('loantype/show', [LoanTypesController::class, 'index'])->name('loantype.index');
 Route::get('payment/show', [PaymentsController::class, 'index'])->name('payment.index');
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
@@ -94,3 +92,10 @@ Route::get('setting/show', [SettingsController::class, 'index'])->name('setting.
 Route::get('customer/index', [CustomersController::class, 'index'])->name('customer.index');
 Route::post('customer/store', [CustomersController::class, 'store'])->name('customer.store');
 Route::get('customer/status-change', [CustomersController::class, 'statusChange'])->name('customer.status-change');
+
+
+// loans
+Route::get('loan/index', [LoansController::class, 'index'])->name('loan.index');
+Route::get('loan/create', [LoansController::class, 'create'])->name('loan.create');
+Route::post('loan/store', [LoansController::class, 'store'])->name('loan.store');
+Route::get('loan/get-payment-detail', [LoansController::class, 'getLoanPaymentDetailAjax'])->name('loan.getLoanPaymentDetailAjax');
