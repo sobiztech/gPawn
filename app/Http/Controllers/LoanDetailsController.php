@@ -8,14 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class LoanDetailsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $loanDetail=DB::table('loan_details')
+        $loanDetails=DB::table('loan_details')
         ->select('loan_details.id', 
         'loan_details.amount', 
         'loan_details.status', 
@@ -23,32 +18,39 @@ class LoanDetailsController extends Controller
         'loans.id AS lID', 
         'loans.date', 
         'loans.amount AS lAmount', 
-        'loans.period')
-        ->join('loans','loan_details.loan_id', '=', 'loans.id');
+        'loans.period',
+        'customers.id AS cID', 
+        'customers.customer_number', 
+        'customers.customer_first_name', 
+        'customers.customer_sur_name',
+        'loan_types.id AS lTID', 
+        'loan_types.loan_type_name', 
+        'users.id AS uID', 
+        'users.id',
+        'employees.id AS eID', 
+        'employees.employee_number', 
+        'employees.employee_first_name', 
+        'employees.employee_sur_name')
+        ->join('loans','loan_details.loan_id', '=', 'loans.id')
+        ->join('loan_types','loans.loan_type_id', '=', 'loan_types.id')
+        ->join('customers','loans.customer_id', '=', 'customers.id')
+        ->join('users','loans.user_id', '=', 'users.id')
+        ->join('employees','users.employee_id', '=', 'employees.id')
+        ->get();
 
-        return $loanDetail;
+        // $loans = DB::table('loans')->select('id', 'property_name')->get();
+
+        return view('pages.loandetail', compact('loanDetails'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+
 
         $loanDetail=new loan_details();
         $loanDetail->month=$request->input('month');
@@ -56,59 +58,26 @@ class LoanDetailsController extends Controller
         $loanDetail->amount=$request->input('amount');
         $loanDetail->status=$request->input('status');
         $loanDetail->description=$request->input('description');
+        $loanDetail->save();
 
-        if($id)
-        {
-            $loanDetail=loan_details::find($id);
-            $loanDetail->save();
-        }
-        else
-        {
-            $loanDetail->save();
-        }
         return $loanDetail;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\loan_details  $loan_details
-     * @return \Illuminate\Http\Response
-     */
     public function show(loan_details $loan_details)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\loan_details  $loan_details
-     * @return \Illuminate\Http\Response
-     */
     public function edit(loan_details $loan_details)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\loan_details  $loan_details
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, loan_details $loan_details)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\loan_details  $loan_details
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(loan_details $loan_details)
     {
         //

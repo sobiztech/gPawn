@@ -8,14 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class EmployeesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $employee=DB::table('employees')
+        $employees=DB::table('employees')
         ->select('employees.id', 
         'employees.employee_number', 
         'employees.employee_first_name', 
@@ -29,109 +24,122 @@ class EmployeesController extends Controller
         'employees.contract_start_date', 
         'employees.contract_end_date', 
         'employees.is_active', 
+        'employees.department_id',
+        'employees.role_id',
         'employees.description',
+        'properties.id AS pID', 
+        'properties.property_name',
         'departments.id AS dID', 
         'departments.department_number', 
         'departments.department_name',
+        'departments.property_id',
         'roles.id AS rID', 
         'roles.role_name')
-        ->join('departments','authentications.role_id', '=', 'departments.id')
-        ->join('roles','employees.role_id', '=', 'roles.id');
+        ->join('departments','employees.department_id', '=', 'departments.id')
+        ->join('properties','departments.property_id', '=', 'properties.id')
+        ->join('roles','employees.role_id', '=', 'roles.id')
+        ->get();
 
-        return $employee;
+        $properties = DB::table('properties')->select('id', 'property_name')->get();
+        $departments = DB::table('departments')->select('id', 'department_name')->get();
+        $roles = DB::table('roles')->select('id', 'role_name')->get();
+
+        return view('pages.employee', compact('employees', 'properties', 'departments', 'roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $employee=new employees();
-        $employee->employee_number=$request->input('employee_number');
-        $employee->employee_first_name=$request->input('employee_first_name');
-        $employee->employee_sur_name=$request->input('employee_sur_name');
-        $employee->role_id=$request->input('role_id');
-        $employee->department_id=$request->input('department_id');
-        $employee->nic=$request->input('nic');
-        $employee->date_of_birth=$request->input('date_of_birth');
-        $employee->gender=$request->input('gender');
-        $employee->phone_number=$request->input('phone_number');
-        $employee->email=$request->input('email');
-        $employee->address=$request->input('address');
-        $employee->image=$request->file('image');
-        $employee->contract_start_date=$request->input('contract_start_date');
-        $employee->contract_end_date=$request->input('contract_end_date');
-        $employee->is_active=$request->input('is_active');
-        $employee->description=$request->input('description');
+        if ($id == 0) { // create
+            $request['employee_number'] = 'emp-' . rand(0,9) . date('ymdHis');
 
-        if($id)
-        {
-            $employee=employees::find($id);
-            $employee->save();
+
+            $this->validate($request, [
+                'email' => 'unique:employees,email',
+                'nic' => 'required|min:10|max:12|unique:employees,nic',
+                'employee_number' => 'required|unique:employees,employee_number'
+            ]);
+
+            $employee = new employees();
+            $employee->employee_number = $request->employee_number;
+            $employee->is_active = 1;
+
+        } else { // update
+            $this->validate($request, [
+                'email' => 'unique:employees,email,' .$id,
+                'nic' => 'required|min:10|max:12|unique:employees,nic,' .$id
+            ]);
+
+            $employee = employees::find($id);
         }
-        else
-        {
+        
+        try {        
+            $employee->employee_first_name=$request->input('employee_first_name');
+            $employee->employee_sur_name=$request->input('employee_sur_name');
+            $employee->role_id=$request->input('role_id');
+            $employee->department_id=$request->input('department_id');
+            $employee->nic=$request->input('nic');
+            $employee->date_of_birth=$request->input('date_of_birth');
+            $employee->gender=$request->input('gender');
+            $employee->phone_number=$request->input('phone_number');
+            $employee->email=$request->input('email');
+            $employee->address=$request->input('address');
+            // $employee->image=$request->file('image');
+            $employee->contract_start_date = $request->input('contract_start_date');
+            $employee->contract_end_date = $request->input('contract_end_date');
+            $employee->description=$request->input('description');
             $employee->save();
+
+            
+            return redirect()->route('employee.index')->with('success', 'Employee ....');
+
+        } catch (\Throwable $th) {
+            
+            return redirect()->route('employee.index')->with('error', 'error ....');
+            
         }
-        return $employee;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\employees  $employees
-     * @return \Illuminate\Http\Response
-     */
+    // status change
+    public function statusChange(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+
+        if ($status == 1) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        $employee = employees::find($id);
+        $employee->is_active = $status;
+        $employee->save();
+
+        return 'Done';
+    }
+
     public function show(employees $employees)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\employees  $employees
-     * @return \Illuminate\Http\Response
-     */
     public function edit(employees $employees)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\employees  $employees
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, employees $employees)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\employees  $employees
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(employees $employees)
     {
         //

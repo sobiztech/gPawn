@@ -8,98 +8,68 @@ use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $role=DB::table('roles')
+        $roles=DB::table('roles')
         ->select('roles.id', 
         'roles.role_name', 
-        'roles.description');
+        'roles.description')
+        ->get();
 
-        return $role;
+        return view('pages.role', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $role=new roles();
-        $role->role_name=$request->input('date');
-        $role->description=$request->input('description');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'role_name' => 'unique:roles,role_name'
+            ]);
 
-        if($id)
-        {
-            $role=roles::find($id);
-            $role->save();
+            $role = new roles();
+
+        } else { // update
+            $this->validate($request, [
+                'role_name' => 'unique:roles,role_name,' .$id
+            ]);
+
+            $role = roles::find($id);
         }
-        else
-        {
+        
+        try {        
+            $role->role_name=$request->input('role_name');
+            $role->description=$request->input('description');
             $role->save();
+
+            return redirect()->route('role.index')->with('success', 'Role ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('role.index')->with('error', 'error ....');
         }
-        return $role;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\roles  $roles
-     * @return \Illuminate\Http\Response
-     */
     public function show(roles $roles)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\roles  $roles
-     * @return \Illuminate\Http\Response
-     */
     public function edit(roles $roles)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\roles  $roles
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, roles $roles)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\roles  $roles
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(roles $roles)
     {
         //
