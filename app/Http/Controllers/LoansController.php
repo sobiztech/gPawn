@@ -8,35 +8,40 @@ use Illuminate\Support\Facades\DB;
 
 class LoansController extends Controller
 {
-    
     public function index()
     {
-        // $loan=DB::table('loans')
-        // ->select('loans.id', 
-        // 'loans.date', 
-        // 'loans.amount', 
-        // 'loans.period', 
-        // 'loans.description', 
-        // 'customers.id AS cID', 
-        // 'customers.customer_number', 
-        // 'customers.customer_first_name', 
-        // 'customers.customer_sur_name',
-        // 'loan_types.id AS lTID', 
-        // 'loan_types.loan_type_name', 
-        // 'users.id AS uID', 
-        // 'users.id',
-        // 'employees.id AS eID', 
-        // 'employees.employee_number', 
-        // 'employees.employee_first_name', 
-        // 'employees.employee_sur_name')
-        // ->join('customers','loans.customer_id', '=', 'customers.id')
-        // ->join('loan_types','loans.loan_type_id', '=', 'loan_types.id')
-        // ->join('users','loans.user_id', '=', 'users.id')
-        // ->join('employees','loans.employee_id', '=', 'employees.id');
+        $loans=DB::table('loans')
+        ->select('loans.id', 
+        'loans.date', 
+        'loans.amount', 
+        'loans.period', 
+        'loans.interest',
+        'loans.customer_id', 
+        'loans.loan_type_id', 
+        'loans.user_id', 
+        'loans.description', 
+        'customers.id AS cID', 
+        'customers.customer_number', 
+        'customers.customer_first_name', 
+        'customers.customer_sur_name',
+        'loan_types.id AS lTID', 
+        'loan_types.loan_type_name', 
+        'users.id AS uID', 
+        'users.id',
+        'employees.id AS eID', 
+        'employees.employee_number', 
+        'employees.employee_first_name', 
+        'employees.employee_sur_name')
+        ->join('customers','loans.customer_id', '=', 'customers.id')
+        ->join('loan_types','loans.loan_type_id', '=', 'loan_types.id')
+        ->join('users','loans.user_id', '=', 'users.id')
+        ->join('employees','users.employee_id', '=', 'employees.id')
+        ->get();
 
-        // return $loan;
+        $loan_types = DB::table('loan_types')->select('id', 'loan_type_name')->get();
+        $customers = DB::table('customers')->select('id', 'customer_first_name',)->get();
 
-        return view('pages.loan.index');
+        return view('pages.loan.index', compact('loans', 'loan_types', 'customers'));
     }
 
     
@@ -57,25 +62,48 @@ class LoansController extends Controller
         return view('pages.loan.create', compact('customers', 'loan_types'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        $id = $request->id;
+
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'customer_id' => 'unique:loans,customer_id'
+            ]);
+
+            $loan = new loans();
+
+        } else { // update
+            $this->validate($request, [
+                'customer_id' => 'unique:loans,customer_id,' .$id
+            ]);
+
+            $loan = loans::find($id);
+        }
+        
+        try {        
+            $loan->date=$request->input('date');
+            $loan->customer_id=$request->input('customer_id');
+            $loan->amount=$request->input('amount');
+            $loan->period=$request->input('period');
+            $loan->interest=$request->input('interest');
+            $loan->loan_type_id=$request->input('loan_type_id');
+            $loan->user_id='1';
+            // $loan->user_id=$request->input('user_id');
+            $loan->description=$request->input('description');
+            $loan->save();
+
+            return redirect()->route('loan.index')->with('success', 'Loan ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('loan.index')->with('error', 'error ....');
+        }
+        /////
         $id=0;
         $id=$request->id;
 
         $loan=new loans();
-        $loan->date=$request->input('date');
-        $loan->customer_id=$request->input('customer_id');
-        $loan->amount=$request->input('amount');
-        $loan->period=$request->input('period');
-        $loan->loan_type_id=$request->input('loan_type_id');
-        $loan->user_id=$request->input('user_id');
-        $loan->description=$request->input('description');
+        
 
         if($id)
         {

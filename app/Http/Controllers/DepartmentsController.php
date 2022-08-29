@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class departmentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $departments=DB::table('departments')
@@ -23,7 +18,7 @@ class departmentsController extends Controller
         'departments.email', 
         'departments.location', 
         'departments.description',
-        'properties.id AS pID', 
+        'departments.property_id', 
         'properties.property_name')
         ->join('properties','departments.property_id', '=', 'properties.id')
         ->get();
@@ -33,89 +28,66 @@ class departmentsController extends Controller
         return view('pages.department', compact('departments', 'properties'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $department=new departments();
-        $department->department_number=$request->input('department_number');
-        $department->department_name=$request->input('department_name');
-        $department->properties_id=$request->input('properties_id');
-        $department->phone_number=$request->input('phone_number');
-        $department->email=$request->input('email');
-        $department->location=$request->input('location');
-        $department->is_active=$request->input('is_active');
-        $department->description=$request->input('description');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'email' => 'unique:departments,email',
+                'department_number' => 'required|unique:departments,department_number',
+                'department_name' => 'required|unique:departments,department_name'
+            ]);
 
-        if($id)
-        {
-            $department=departments::find($id);
-            $department->save();
+            $department = new departments();
+
+        } else { // update
+            $this->validate($request, [
+                'email' => 'unique:departments,email,' .$id,
+                'department_number' => 'required|unique:departments,department_number,' .$id,
+                'department_name' => 'required|unique:departments,department_name,' .$id
+            ]);
+
+            $department = departments::find($id);
         }
-        else
-        {
+        
+        try {        
+            $department->department_number=$request->input('department_number');
+            $department->department_name=$request->input('department_name');
+            $department->property_id=$request->input('property_id');
+            $department->phone_number=$request->input('phone_number');
+            $department->email=$request->input('email');
+            $department->location=$request->input('location');
+            $department->description=$request->input('description');
             $department->save();
+
+            return redirect()->route('department.index')->with('success', 'Department ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('department.index')->with('error', 'error ....');
         }
-        return $department;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\$departments  $$departments
-     * @return \Illuminate\Http\Response
-     */
     public function show(departments $departments)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\$departments  $$departments
-     * @return \Illuminate\Http\Response
-     */
     public function edit(departments $departments)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\$departments  $$departments
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, departments $departments)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\$departments  $$departments
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(departments $departments)
     {
         //

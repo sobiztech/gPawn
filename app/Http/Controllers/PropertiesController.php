@@ -35,7 +35,7 @@ class PropertiesController extends Controller
         if ($id == 0) { // create
             $this->validate($request, [
                 'email' => 'unique:properties,email',
-                'property_name' => 'required|min:10|max:12|unique:customers,property_name'
+                'property_name' => 'required|unique:properties,property_name'
             ]);
 
             $property = new properties();
@@ -43,7 +43,7 @@ class PropertiesController extends Controller
         } else { // update
             $this->validate($request, [
                 'email' => 'unique:properties,email,' .$id,
-                'property_name' => 'required|min:10|max:12|unique:customers,property_name,' .$id
+                'property_name' => 'required|unique:properties,property_name,' .$id
             ]);
 
             $property = properties::find($id);

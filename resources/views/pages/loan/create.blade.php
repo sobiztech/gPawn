@@ -84,9 +84,9 @@
                                 <div class="form-group">
                                     <label>Percentage -(%)<span class="text-danger">*</span></label>
                                     <div>
-                                        <input type="number" class="form-control" id="percentage" name="percentage"
-                                            value="{{ old('percentage') ? old('percentage') : 1  }}" required step="0.01" min="0" />
-                                        <p style="color:Tomato"> @error('percentage')
+                                        <input type="number" class="form-control" id="interest" name="interest"
+                                            value="{{ old('interest') ? old('interest') : 1  }}" required step="0.01" min="0" />
+                                        <p style="color:Tomato"> @error('interest')
                                                 {{ $message }}
                                             @enderror
                                         </p>

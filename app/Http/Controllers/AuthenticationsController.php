@@ -8,101 +8,74 @@ use Illuminate\Support\Facades\DB;
 
 class AuthenticationsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $authentication=DB::table('authentications')
+        $authentications=DB::table('authentications')
         ->select('authentications.id', 
         'authentications.permisions', 
+        'authentications.role_id', 
         'roles.id AS roleID', 
         'roles.role_name', 
         'roles.description')
-        ->join('roles','authentications.role_id', '=', 'roles.id');
+        ->join('roles','authentications.role_id', '=', 'roles.id')
+        ->get();
 
-        return $authentication;
+        $roles = DB::table('roles')->select('id', 'role_name')->get();
+
+        return view('pages.authentication',compact('authentications', 'roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $authentication=new authentications();
-        $authentication->role_id=$request->input('role_id');
-        $authentication->authentication_keys_id=$request->input('authentication_keys_id');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'role_id' => 'unique:authentications,role_id'
+            ]);
 
-        if($id)
-        {
-            $authentication=authentications::find($id);
-            $authentication->save();
+            $authentication = new authentications();
+
+        } else { // update
+            $this->validate($request, [
+                'role_id' => 'unique:authentications,role_id,' .$id
+            ]);
+
+            $authentication = authentications::find($id);
         }
-        else
-        {
+        
+        try {        
+            $authentication->role_id=$request->input('role_id');
+            $authentication->authentication_keys_id=$request->input('authentication_keys_id');
             $authentication->save();
+
+            return redirect()->route('authenticationkey.index')->with('success', 'Authentication Key ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('authenticationkey.index')->with('error', 'error ....');
         }
-        return $authentication;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\authentications  $authentications
-     * @return \Illuminate\Http\Response
-     */
     public function show(authentications $authentications)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\authentications  $authentications
-     * @return \Illuminate\Http\Response
-     */
     public function edit(authentications $authentications)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\authentications  $authentications
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, authentications $authentications)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\authentications  $authentications
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(authentications $authentications)
     {
         //
