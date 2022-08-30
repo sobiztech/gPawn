@@ -16,6 +16,7 @@ class LoansController extends Controller
         'loans.amount', 
         'loans.period', 
         'loans.interest',
+        'loans.loan_end_date',
         'loans.customer_id', 
         'loans.loan_type_id', 
         'loans.user_id', 
@@ -87,6 +88,7 @@ class LoansController extends Controller
             $loan->amount=$request->input('amount');
             $loan->period=$request->input('period');
             $loan->interest=$request->input('interest');
+            $loan->loan_end_date=$request->input('loan_end_date');
             $loan->loan_type_id=$request->input('loan_type_id');
             $loan->user_id='1';
             // $loan->user_id=$request->input('user_id');
@@ -98,23 +100,6 @@ class LoansController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('loan.index')->with('error', 'error ....');
         }
-        /////
-        $id=0;
-        $id=$request->id;
-
-        $loan=new loans();
-        
-
-        if($id)
-        {
-            $loan=loans::find($id);
-            $loan->save();
-        }
-        else
-        {
-            $loan->save();
-        }
-        return $loan;
     }
 
    
@@ -128,17 +113,14 @@ class LoansController extends Controller
     {
         //
     }
-
     
     public function update(Request $request, loans $loans)
     {
         //
     }
-
     
     public function getLoanPaymentDetailAjax(Request $request)
     {
-        
         $amount = $request->amount;
         $percentage = $request->percentage;
         $period = $request->period;
@@ -166,6 +148,5 @@ class LoansController extends Controller
         ];
 
         return $data;
-
     }
 }
