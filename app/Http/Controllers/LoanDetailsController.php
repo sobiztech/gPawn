@@ -17,8 +17,10 @@ class LoanDetailsController extends Controller
         'loan_details.description',
         'loans.id AS lID', 
         'loans.date', 
-        'loans.amount AS lAmount', 
-        'loans.period',
+        'loans.amount', 
+        'loans.period', 
+        'loans.interest',
+        'loans.loan_end_date',
         'customers.id AS cID', 
         'customers.customer_number', 
         'customers.customer_first_name', 
@@ -50,8 +52,6 @@ class LoanDetailsController extends Controller
 
     public function store(Request $request)
     {
-
-
         $loanDetail=new loan_details();
         $loanDetail->month=$request->input('month');
         $loanDetail->loan_id=$request->input('loan_id');

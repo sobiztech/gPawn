@@ -14,13 +14,24 @@ class PaymentsController extends Controller
         ->select('payments.id',
         'payments.date', 
         'payments.invoice_no', 
-        'payments.amount', 
+        'payments.amount',
+        'payments.discount', 
         'payments.description',
-        'payments.customer_id',
+        'payments.loan_id',
         'payments.payment_type_id',
         'payments.user_id',
         'payment_types.id AS pTID', 
         'payment_types.payment_type_name',
+        'loans.id AS lID', 
+        'loans.date', 
+        'loans.amount', 
+        'loans.period', 
+        'loans.interest',
+        'loans.loan_end_date',
+        'loans.customer_id', 
+        'loans.loan_type_id', 
+        'loans.user_id', 
+        'loans.description', 
         'customers.id AS cID', 
         'customers.customer_number', 
         'customers.customer_first_name', 
@@ -31,7 +42,8 @@ class PaymentsController extends Controller
         'employees.employee_first_name', 
         'employees.employee_sur_name')
         ->join('payment_types','payments.payment_type_id', '=', 'payment_types.id')
-        ->join('customers','payments.customer_id', '=', 'customers.id')
+        ->join('loans','payments.loan_id', '=', 'loans.id')
+        ->join('customers','loans.customer_id', '=', 'customers.id')
         ->join('users','payments.user_id', '=', 'users.id')
         ->join('employees','users.employee_id', '=', 'employees.id')
         ->get();

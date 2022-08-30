@@ -6,20 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('login_logs', function (Blueprint $table) {
+        Schema::create('payables', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
-            $table->string('action');
-            $table->integer('user_id')->unsigned();
+            $table->integer('loan_id')->unsigned();
+            $table->decimal('amount',10,2);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('login_logs');
+        Schema::dropIfExists('payables');
     }
 };
