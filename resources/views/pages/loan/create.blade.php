@@ -85,7 +85,7 @@
                                     <label>Percentage -(%)<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="number" class="form-control" id="percentage" name="percentage"
-                                            value="{{ old('percentage') ? old('percentage') : 1  }}" required step="0.01" min="0" />
+                                            value="{{ old('percentage') ? old('percentage') : 1  }}" required step="0.01" min="0" max="100"/>
                                         <p style="color:Tomato"> @error('percentage')
                                                 {{ $message }}
                                             @enderror
@@ -198,7 +198,7 @@
 @endsection
 
 @section('scripts')
-<!-- SELECT2 JS -->
+{{-- <!-- SELECT2 JS --> --}}
 {{-- <script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script> --}}
 
 <script>
