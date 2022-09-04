@@ -78,6 +78,7 @@
                                 <ul class="slide-menu">
                                     <!-- <li class="side-menu-label1"><a href="javascript:void(0)">Customer</a></li> -->
                                     <li><a href="{{ route('paymenttype.index') }}" class="slide-item">Payment Types</a></li>
+                                    <li><a href="{{ route('payment.payable') }}" class="slide-item">Payable</a></li>
                                     <li><a href="{{ route('payment.index') }}" class="slide-item">Payments</a></li>
                                 </ul>
                             </li>
