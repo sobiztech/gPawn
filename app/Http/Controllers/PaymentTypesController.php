@@ -8,98 +8,68 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentTypesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $paymentType=DB::table('payment_types')
+        $paymentTypes=DB::table('payment_types')
         ->select('payment_types.id', 
         'payment_types.payment_type_name', 
-        'payment_types.description');
-        
-        return $paymentType;
+        'payment_types.description')
+        ->get();
+
+        return view('pages.paymenttype', compact('paymentTypes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $paymentType=new payment_types();
-        $paymentType->payment_type_name=$request->input('payment_type_name');
-        $paymentType->description=$request->input('description');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'payment_type_name' => 'unique:payment_types,payment_type_name'
+            ]);
 
-        if($id)
-        {
-            $paymentType=payment_types::find($id);
-            $paymentType->save();
+            $paymentType = new payment_types();
+
+        } else { // update
+            $this->validate($request, [
+                'payment_type_name' => 'unique:payment_types,payment_type_name,' .$id
+            ]);
+
+            $paymentType = payment_types::find($id);
         }
-        else
-        {
+        
+        try {        
+            $paymentType->payment_type_name=$request->input('payment_type_name');
+            $paymentType->description=$request->input('description');
             $paymentType->save();
+
+            return redirect()->route('paymenttype.index')->with('success', 'Payment Type ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('paymenttype.index')->with('error', 'error ....');
         }
-        return $paymentType;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\payment_types  $payment_types
-     * @return \Illuminate\Http\Response
-     */
     public function show(payment_types $payment_types)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\payment_types  $payment_types
-     * @return \Illuminate\Http\Response
-     */
     public function edit(payment_types $payment_types)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\payment_types  $payment_types
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, payment_types $payment_types)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\payment_types  $payment_types
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(payment_types $payment_types)
     {
         //

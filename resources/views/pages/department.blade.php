@@ -58,7 +58,6 @@
                                             data-id="{{ $row->id }}"
                                             data-department_number="{{ $row->department_number }}" 
                                             data-department_name="{{ $row->department_name }}" 
-                                            data-date_of_birth="{{ $row->date_of_birth }}" 
                                             data-phone_number="{{ $row->phone_number }}" 
                                             data-email="{{ $row->email }}" 
                                             data-location="{{ $row->location }}" 
@@ -84,18 +83,19 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createFormModal">Create Property</h5>
+                    <h5 class="modal-title" id="createFormModal">Create Department</h5>
                     <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" ><span aria-hidden="true">&times;</span></button>
                 </div>
 
                 <div class="modal-body">
                     {{-- class="needs-validation" novalidate="" --}}
-                    <form  method="POST" action="{{ route('property.store') }}">
+                    <form  method="POST" action="{{ route('department.store') }}">
                         @csrf
                         <input type="hidden" name="id" id="id" value="{{ old('id') }}">
 
                         <div class="row">
-                        <div class="col-md-4">
+                                    
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label >Property<span class="text-danger">*</span></label>
                                     <div>
@@ -105,7 +105,7 @@
                                             <option value="{{ $item->id }}" {{ (old('property_id') == $item->id) ? 'selected' : '' }}>{{ $item->property_name }}</option>
                                             @endforeach
                                         </select>
-                                        <p style="color:Tomato"> @error('phone_number'){{ $message }} @enderror</p>
+                                        <p style="color:Tomato"> @error('property_id'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                     <label >Email<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="text" class="form-control" id="email" name="email"
-                                             value="{{ old('email') }}" required minlength="10" maxlength="12"/>
+                                             value="{{ old('email') }}" required/>
                                         <p style="color:Tomato"> @error('email'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
@@ -206,9 +206,9 @@
             var id = $('#id').val();
 
             if (id == 0) {
-                $('#createFormModal').html('Create Customer');
+                $('#createFormModal').html('Create Department');
             } else {
-                $('#createFormModal').html('Update Customer');
+                $('#createFormModal').html('Update Department');
             }
         }
 
@@ -222,7 +222,7 @@
             $("#location").val('');
             $("#description").val('');
 
-            $('#createFormModal').html('Create Customer');
+            $('#createFormModal').html('Create Department');
             $('p').html('');
             
             $('#createModal').modal('show');
@@ -231,14 +231,15 @@
         // update
         $('.edit').click(function () { 
             $("#id").val($(this).attr('data-id'));
-            $("#property_name").val($(this).attr('data-property_name'));
+            $("#department_number").val($(this).attr('data-department_number'));
             $("#department_name").val($(this).attr('data-department_name'));
             $("#phone_number").val($(this).attr('data-phone_number'));
             $("#email").val($(this).attr('data-email'));
             $("#location").val($(this).attr('data-location'));
             $("#description").val($(this).attr('data-description'));
+            $("#property_id").val($(this).attr('data-property_id'));
 
-            $('#createFormModal').html('Update Customer');
+            $('#createFormModal').html('Update Department');
             $('p').html('');
             
             $('#createModal').modal('show');

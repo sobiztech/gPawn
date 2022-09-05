@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('authentications', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_id')->unsigned();
-            $table->string('permisions');
+            $table->string('permissions');
             $table->timestamps();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });

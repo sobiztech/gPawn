@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('login_logs', function (Blueprint $table) {
+        Schema::create('schedule_runs', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
-            $table->string('action');
-            $table->integer('user_id')->unsigned();
+            $table->integer('payable_id')->unsigned();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('payable_id')->references('id')->on('payables')->onDelete('cascade');
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('login_logs');
+        Schema::dropIfExists('schedule_runs');
     }
 };

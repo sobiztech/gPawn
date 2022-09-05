@@ -8,106 +8,80 @@ use Illuminate\Support\Facades\DB;
 
 class BlackListsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $blackList=DB::table('black_lists')
-        ->select('customers.id', 
+        $blackLists=DB::table('black_lists')
+        ->select('black_lists.customer_id',
+        'black_lists.black_list_type_id',
+        'customers.id', 
         'customers.customer_number', 
         'customers.customer_first_name', 
         'customers.customer_sur_name', 
+        'customers.nic', 
         'customers.customer_type_id', 
-        'customers.nic',
         'black_list_types.id AS bLTypeID', 
         'black_list_types.black_list_type_name')
         ->join('customers','black_lists.customer_id','=','customers.id')
-        ->join('black_list_types','black_lists.black_list_type_id','=','black_list_types.id');
+        ->join('black_list_types','black_lists.black_list_type_id','=','black_list_types.id')
+        ->get();
 
-        return $blackList;
+        $blackListTypes = DB::table('black_list_types')->select('id', 'black_list_type_name')->get();
+        $customers = DB::table('customers')->select('id', 'customer_number', 'customer_first_name', 'customer_sur_name', 'phone_number', )->get();
+
+        return view('pages.blacklist',compact('blackLists', 'blackListTypes', 'customers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $blackList=new black_lists();
-        $blackList->customer_id=$request->input('customer_id');
-        $blackList->black_list_type_id=$request->input('black_list_type_id');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'customer_id' => 'unique:black_lists,customer_id'
+            ]);
 
-        if($id)
-        {
-            $blackList=black_lists::find($id);
-            $blackList->save();
+            $blackList = new black_lists();
+
+        } else { // update
+            $this->validate($request, [
+                'customer_id' => 'unique:black_lists,customer_id,' .$id
+            ]);
+
+            $blackList = black_lists::find($id);
         }
-        else
-        {
+        
+        try {        
+            $blackList->customer_id=$request->input('customer_id');
+            $blackList->black_list_type_id=$request->input('black_list_type_id');
             $blackList->save();
-        }
 
-        return $blackList;
+            return redirect()->route('blacklist.index')->with('success', 'Black List ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('blacklist.index')->with('error', 'error ....');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\black_lists  $black_lists
-     * @return \Illuminate\Http\Response
-     */
     public function show(black_lists $black_lists)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\black_lists  $black_lists
-     * @return \Illuminate\Http\Response
-     */
     public function edit(black_lists $black_lists)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\black_lists  $black_lists
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, black_lists $black_lists)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\black_lists  $black_lists
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(black_lists $black_lists)
     {
         //

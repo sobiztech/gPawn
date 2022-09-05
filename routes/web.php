@@ -40,29 +40,29 @@ Route::get('/', function () {
 
 //auth
 Route::get('authenticationkey/show', [AuthenticationKeysController::class, 'index'])->name('authenticationkey.index');
-Route::get('authenticationkey/store', [AuthenticationKeysController::class, 'store'])->name('authenticationkey.store');
+Route::post('authenticationkey/store', [AuthenticationKeysController::class, 'store'])->name('authenticationkey.store');
 Route::get('authentication/show', [AuthenticationsController::class, 'index'])->name('authentication.index');
-Route::get('authentication/store', [AuthenticationsController::class, 'store'])->name('authentication.store');
+Route::post('authentication/store', [AuthenticationsController::class, 'store'])->name('authentication.store');
 
 //role
 Route::get('role/show', [RolesController::class, 'index'])->name('role.index');
-Route::get('role/store', [RolesController::class, 'store'])->name('role.store');
+Route::post('role/store', [RolesController::class, 'store'])->name('role.store');
 
 //setting
 Route::get('setting/show', [SettingsController::class, 'index'])->name('setting.index');
-Route::get('setting/store', [SettingsController::class, 'store'])->name('setting.store');
+Route::post('setting/store', [SettingsController::class, 'store'])->name('setting.store');
 
 //blacklist
 Route::get('blacklist/show', [BlackListsController::class, 'index'])->name('blacklist.index');
-Route::get('blacklist/store', [BlackListsController::class, 'store'])->name('blacklist.store');
+Route::post('blacklist/store', [BlackListsController::class, 'store'])->name('blacklist.store');
 Route::get('blacklisttype/show', [BlackListTypesController::class, 'index'])->name('blacklisttype.index');
-Route::get('blacklisttype/store', [BlackListTypesController::class, 'store'])->name('blacklisttype.store');
+Route::post('blacklisttype/store', [BlackListTypesController::class, 'store'])->name('blacklisttype.store');
 
 //loan
 Route::get('loantype/show', [LoanTypesController::class, 'index'])->name('loantype.index');
-Route::get('loantype/store', [LoanTypesController::class, 'store'])->name('loantype.store');
+Route::post('loantype/store', [LoanTypesController::class, 'store'])->name('loantype.store');
 Route::get('loandetail/show', [LoanDetailsController::class, 'index'])->name('loandetail.index');
-Route::get('loandetail/store', [LoanDetailsController::class, 'store'])->name('loandetail.store');
+Route::post('loandetail/store', [LoanDetailsController::class, 'store'])->name('loandetail.store');
 Route::get('loan/index', [LoansController::class, 'index'])->name('loan.index');
 Route::get('loan/create', [LoansController::class, 'create'])->name('loan.create');
 Route::post('loan/store', [LoansController::class, 'store'])->name('loan.store');
@@ -70,8 +70,8 @@ Route::get('loan/get-payment-detail', [LoansController::class, 'getLoanPaymentDe
 
 
 //payment
-Route::get('paymenttype/show', [PaymentsController::class, 'index'])->name('paymenttype.index');
-Route::get('paymenttype/store', [PaymentsController::class, 'store'])->name('paymenttype.store');
+Route::get('paymenttype/show', [PaymentTypesController::class, 'index'])->name('paymenttype.index');
+Route::post('paymenttype/store', [PaymentTypesController::class, 'store'])->name('paymenttype.store');
 Route::get('payment/show', [PaymentsController::class, 'index'])->name('payment.index');
 Route::get('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
 Route::get('payable/view', [PaymentsController::class, 'payable'])->name('payment.payable');
@@ -79,11 +79,11 @@ Route::get('payable/schedule', [PaymentsController::class, 'schedule'])->name('p
 
 //master
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
-Route::get('property/store', [PropertiesController::class, 'store'])->name('property.store');
+Route::post('property/store', [PropertiesController::class, 'store'])->name('property.store');
 Route::get('department/show', [departmentsController::class, 'index'])->name('department.index');
-Route::get('department/store', [departmentsController::class, 'store'])->name('department.store');
+Route::post('department/store', [departmentsController::class, 'store'])->name('department.store');
 Route::get('employee/show', [EmployeesController::class, 'index'])->name('employee.index');
-Route::get('employee/store', [EmployeesController::class, 'store'])->name('employee.store');
+Route::post('employee/store', [EmployeesController::class, 'store'])->name('employee.store');
 
 // customer
 Route::get('customer/show', [CustomersController::class, 'index'])->name('customer.index');
@@ -92,5 +92,6 @@ Route::get('customer/status-change', [CustomersController::class, 'statusChange'
 
 //customer Type
 Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name('customertype.index');
-Route::get('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
+Route::post('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
 
+Route::get('employee/status-change', [EmployeesController::class, 'statusChange'])->name('employee.status-change');

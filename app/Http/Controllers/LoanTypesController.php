@@ -8,98 +8,68 @@ use Illuminate\Support\Facades\DB;
 
 class LoanTypesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $loanType=DB::table('loan_types')
+        $loanTypes=DB::table('loan_types')
         ->select('loan_types.id',
         'loan_types.loan_type_name', 
-        'loan_types.description');
+        'loan_types.description')
+        ->get();
 
-        return $loanType;
+        return view('pages.loantype', compact('loanTypes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $id=0;
-        $id=$request->id;
+        $id = $request->id;
 
-        $loanType=new loan_types();
-        $loanType->loan_type_name=$request->input('loan_type_name');
-        $loanType->description=$request->input('description');
+        if ($id == 0) { // create
+            $this->validate($request, [
+                'loan_type_name' => 'unique:loan_types,loan_type_name'
+            ]);
 
-        if($id)
-        {
-            $loanType=loan_types::find($id);
-            $loanType->save();
+            $loanType = new loan_types();
+
+        } else { // update
+            $this->validate($request, [
+                'loan_type_name' => 'unique:loan_types,loan_type_name,' .$id
+            ]);
+
+            $loanType = loan_types::find($id);
         }
-        else
-        {
+        
+        try {        
+            $loanType->loan_type_name=$request->input('loan_type_name');
+            $loanType->description=$request->input('description');
             $loanType->save();
+
+            return redirect()->route('loantype.index')->with('success', 'Loan Type ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('loantype.index')->with('error', 'error ....');
         }
-        return $loanType;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\loan_types  $loan_types
-     * @return \Illuminate\Http\Response
-     */
     public function show(loan_types $loan_types)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\loan_types  $loan_types
-     * @return \Illuminate\Http\Response
-     */
     public function edit(loan_types $loan_types)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\loan_types  $loan_types
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, loan_types $loan_types)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\loan_types  $loan_types
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(loan_types $loan_types)
     {
         //

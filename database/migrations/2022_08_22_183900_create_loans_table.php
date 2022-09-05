@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('customer_id')->unsigned();
             $table->decimal('amount',10,2);
             $table->integer('period');
+            $table->integer('interest');
+            $table->date('loan_end_date');
             $table->integer('loan_type_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->longText('description')->nullable();
