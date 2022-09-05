@@ -21,7 +21,7 @@ class PaymentsController extends Controller
         'payments.description',
         'payments.loan_id',
         'payments.payment_type_id',
-        'payments.user_id',
+        'payments.emp_id',
         'payment_types.id AS pTID', 
         'payment_types.payment_type_name',
         'loans.id AS lID', 
@@ -32,13 +32,12 @@ class PaymentsController extends Controller
         'loans.loan_end_date',
         'loans.customer_id', 
         'loans.loan_type_id', 
-        'loans.user_id', 
+        'loans.emp_id', 
         'loans.description', 
         'customers.id AS cID', 
         'customers.customer_number', 
         'customers.customer_first_name', 
-        'customers.customer_sur_name',
-        'users.id AS uID', 
+        'customers.customer_sur_name', 
         'employees.id AS eID', 
         'employees.employee_number', 
         'employees.employee_first_name', 
@@ -46,8 +45,7 @@ class PaymentsController extends Controller
         ->join('payment_types','payments.payment_type_id', '=', 'payment_types.id')
         ->join('loans','payments.loan_id', '=', 'loans.id')
         ->join('customers','loans.customer_id', '=', 'customers.id')
-        ->join('users','payments.user_id', '=', 'users.id')
-        ->join('employees','users.employee_id', '=', 'employees.id')
+        ->join('employees','payments.emp_id', '=', 'employees.id')
         ->get();
 
         $payment_types = DB::table('payment_types')->get();

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->increments('id');
             $table->date('date');
             $table->integer('loan_id')->unsigned();
-            $table->decimal('amount',10,2);
+            $table->decimal('amount',10,2)->default(0.00);
             $table->timestamps();
             $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });

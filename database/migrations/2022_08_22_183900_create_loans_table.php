@@ -17,16 +17,21 @@ return new class extends Migration
             $table->increments('id');
             $table->date('date');
             $table->integer('customer_id')->unsigned();
-            $table->decimal('amount',10,2);
+            $table->decimal('amount',10,2)->default(0.00);
             $table->integer('period');
-            $table->integer('interest');
-            $table->date('loan_end_date');
+            $table->decimal('interest',4,2);
+            $table->decimal('total_payable',10,2);
             $table->integer('loan_type_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->enum('pay_type', ['Daily', 'Weekly', 'Monthly']);
+            $table->integer('loan_status')->default(0);
+            $table->decimal('schedule_payment_amount',10,2)->default(0.00);
+            $table->date('loan_end_date');
+            $table->integer('emp_id')->unsigned();
             $table->longText('description')->nullable();
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('loan_type_id')->references('id')->on('loan_types')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('emp_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 

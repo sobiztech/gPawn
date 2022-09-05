@@ -21,14 +21,13 @@ class LoanDetailsController extends Controller
         'loans.period', 
         'loans.interest',
         'loans.loan_end_date',
+        'loans.emp_id',
         'customers.id AS cID', 
         'customers.customer_number', 
         'customers.customer_first_name', 
         'customers.customer_sur_name',
         'loan_types.id AS lTID', 
         'loan_types.loan_type_name', 
-        'users.id AS uID', 
-        'users.id',
         'employees.id AS eID', 
         'employees.employee_number', 
         'employees.employee_first_name', 
@@ -36,8 +35,7 @@ class LoanDetailsController extends Controller
         ->join('loans','loan_details.loan_id', '=', 'loans.id')
         ->join('loan_types','loans.loan_type_id', '=', 'loan_types.id')
         ->join('customers','loans.customer_id', '=', 'customers.id')
-        ->join('users','loans.user_id', '=', 'users.id')
-        ->join('employees','users.employee_id', '=', 'employees.id')
+        ->join('employees','loans.emp_id', '=', 'employees.id')
         ->get();
 
         // $loans = DB::table('loans')->select('id', 'property_name')->get();

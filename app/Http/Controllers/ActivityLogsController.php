@@ -14,13 +14,12 @@ class ActivityLogsController extends Controller
         ->select('activity_logs.id', 
         'activity_logs.date', 
         'activity_logs.action',
-        'users.id AS uID',
+        'activity_logs.emp_id',
         'employees.id AS eID', 
         'employees.employee_number', 
         'employees.employee_first_name', 
         'employees.employee_sur_name')
-        ->join('users','activity_logs.user_id', '=', 'users.id')
-        ->join('employees','activity_logs.employee_id', '=', 'employees.id');
+        ->join('employees','activity_logs.emp_id', '=', 'employees.id');
 
         return $activityLogs;
     }
