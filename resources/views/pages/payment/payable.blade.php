@@ -20,10 +20,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header border-bottom">
-                    <a class="btn btn-blue" href="{{ route('payment.schedule') }}">
+                    <button class="btn btn-blue" data-href="{{ route('payment.schedule') }}" id="runSchedule">
                         <span class="btn-icon-wrapper pr-2"> </span>
                         Run Schedule
-                    </a>
+                    </button>
                 </div>
                 
                 <div class="card-body">
@@ -51,7 +51,12 @@
                                         <td>{{ number_format((float)$row->total_payble, 2, '.', ',') }}</td>
                                         <td>{{ number_format((float)$row->total_payed, 2, '.', ',') }}</td>
                                         <td>{{ number_format((float)$row->till_balance_amount, 2, '.', ',') }}</td>
-                                        <td></td>
+                                        <td>
+                                            <button class="btn btn-blue" href="">
+                                                <span class="btn-icon-wrapper pr-2"> </span>
+                                                Payment
+                                            </button>
+                                        </td>
                                    </tr>
                                @endforeach
                             </tbody>
@@ -66,5 +71,43 @@
 
 
 @section('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        // run 
+        $('#runSchedule').on('click', function(event) {
+            event.preventDefault();
+
+            var route = $('#runSchedule').attr('data-href');
+
+            swal({
+                    title: 'Run Daily Scheduler ?',
+                    text: 'Run Scheduler Now !',
+                    icon: 'warning',
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: route,
+                            method: 'get',
+                            data: {},
+                            success: function(res) {
+                                swal('Poof! Run Scheduler !', {
+                                    icon: 'success',
+                                    timer: 1000,
+                                });
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+        });
+    });
+</script>
 
 @endsection
