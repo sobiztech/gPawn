@@ -74,6 +74,8 @@ Route::get('paymenttype/show', [PaymentTypesController::class, 'index'])->name('
 Route::post('paymenttype/store', [PaymentTypesController::class, 'store'])->name('paymenttype.store');
 Route::get('payment/show', [PaymentsController::class, 'index'])->name('payment.index');
 Route::post('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
+Route::get('payable/view', [PaymentsController::class, 'payable'])->name('payment.payable');
+Route::get('payable/schedule', [PaymentsController::class, 'schedule'])->name('payment.schedule');
 
 //master
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
