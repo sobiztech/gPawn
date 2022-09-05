@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->date('month');
             $table->integer('loan_id')->unsigned();
-            $table->decimal('amount',10,2);
+            $table->decimal('amount',10,2)->default(0.00);
             $table->integer('status');
             $table->longText('description')->nullable();
             $table->timestamps();

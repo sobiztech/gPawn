@@ -25,8 +25,13 @@ class BlackListsController extends Controller
         ->join('black_list_types','black_lists.black_list_type_id','=','black_list_types.id')
         ->get();
 
-        $blackListTypes = DB::table('black_list_types')->select('id', 'black_list_type_name')->get();
-        $customers = DB::table('customers')->select('id', 'customer_number', 'customer_first_name', 'customer_sur_name', 'phone_number', )->get();
+        $blackListTypes = DB::table('black_list_types')
+        ->select('id', 'black_list_type_name')
+        ->get();
+
+        $customers = DB::table('customers')
+        ->select('id', 'customer_number', 'customer_first_name', 'customer_sur_name', 'phone_number', )
+        ->get();
 
         return view('pages.blacklist',compact('blackLists', 'blackListTypes', 'customers'));
     }

@@ -14,13 +14,12 @@ class LoginLogsController extends Controller
         ->select('login_logs.id', 
         'login_logs.date', 
         'login_logs.status',
-        'users.id AS uID',
+        'login_logs.emp_id',
         'employees.id AS eID', 
         'employees.employee_number', 
         'employees.employee_first_name', 
         'employees.employee_sur_name')
-        ->join('users','login_logs.user_id', '=', 'users.id')
-        ->join('employees','login_logs.employee_id', '=', 'employees.id');
+        ->join('employees','login_logs.emp_id', '=', 'employees.id');
 
         return $loginLogs;
     }
