@@ -121,7 +121,7 @@ class LoansController extends Controller
 
     public function getLoanPaymentDetailAjax(Request $request)
     {
-
+       
         $amount = $request->amount;
         $percentage = $request->percentage;
         $period = $request->period;
@@ -130,7 +130,17 @@ class LoansController extends Controller
         $end_date = date('Y-m-d', strtotime($start_date . '+' . $period . 'month'));
 
         $diff_day_count =  \Carbon\Carbon::parse($end_date)->diff(\Carbon\Carbon::parse($start_date))->format('%a');
-        $diff_week_count = (int)date("W", strtotime($end_date)) - (int)date("W", strtotime($start_date));
+
+        $startWeekNumber = (int)date("W", strtotime($start_date));
+        $endWeekNumber = (int)date("W", strtotime($end_date));
+        if ($endWeekNumber > $startWeekNumber) {
+            $diff_week_count = $endWeekNumber - $startWeekNumber;
+        } else {
+            $startYearMaxWeekNumber = (int)max(date("W", strtotime(date("Y", strtotime($start_date)) ."-12-27")), date("W", strtotime(date("Y", strtotime($start_date)) ."-12-29")), date("W", strtotime(date("Y", strtotime($start_date)) ."-12-31")));
+
+            $diff_week_count = ($startYearMaxWeekNumber - $startWeekNumber + $endWeekNumber);
+        }
+        
 
 
         $totalPayable = ($amount + (($amount * $percentage / 100) * $period));

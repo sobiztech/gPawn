@@ -125,7 +125,7 @@
                                     <label>Date<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="date" class="form-control" id="date" name="date"
-                                            value="{{ old('date') ? old('date') : date('Y-m-d') }}" required  />
+                                            value="{{ old('date') ? old('date') : date('Y-m-d') }}" required  readonly />
                                         <p style="color:Tomato"> @error('date')
                                                 {{ $message }}
                                             @enderror
