@@ -121,7 +121,7 @@ class LoansController extends Controller
 
     public function getLoanPaymentDetailAjax(Request $request)
     {
-       
+      
         $amount = $request->amount;
         $percentage = $request->percentage;
         $period = $request->period;
@@ -131,14 +131,29 @@ class LoansController extends Controller
 
         $diff_day_count =  \Carbon\Carbon::parse($end_date)->diff(\Carbon\Carbon::parse($start_date))->format('%a');
 
+        $startYear = (int)date("Y", strtotime($start_date));
+        $endYear = (int)date("Y", strtotime($end_date));
         $startWeekNumber = (int)date("W", strtotime($start_date));
         $endWeekNumber = (int)date("W", strtotime($end_date));
-        if ($endWeekNumber > $startWeekNumber) {
+        if (($startYear == $endYear) && ($endWeekNumber > $startWeekNumber)) {
             $diff_week_count = $endWeekNumber - $startWeekNumber;
-        } else {
-            $startYearMaxWeekNumber = (int)max(date("W", strtotime(date("Y", strtotime($start_date)) ."-12-27")), date("W", strtotime(date("Y", strtotime($start_date)) ."-12-29")), date("W", strtotime(date("Y", strtotime($start_date)) ."-12-31")));
 
-            $diff_week_count = ($startYearMaxWeekNumber - $startWeekNumber + $endWeekNumber);
+        } elseif (($startYear == $endYear) && ($startWeekNumber > $endWeekNumber)) {
+            $year = date("Y", strtotime($start_date));
+            $YearMaxWeekNumber = (int)max(date("W", strtotime($year ."-12-27")), date("W", strtotime($year ."-12-29")), date("W", strtotime($year ."-12-31")));
+
+            $diff_week_count = ($YearMaxWeekNumber - $startWeekNumber + $endWeekNumber);
+
+        } else {
+            $yearDiff = ($endYear - $startYear);
+            $totalYearsWeekNumbers = 0;
+            for ($i=0; $i < $yearDiff; $i++) { 
+                $year = date("Y", strtotime($start_date . '+' . $i . 'year'));
+                $YearMaxWeekNumber = (int)max(date("W", strtotime($year ."-12-27")), date("W", strtotime($year ."-12-29")), date("W", strtotime($year ."-12-31")));
+                $totalYearsWeekNumbers += $YearMaxWeekNumber;
+            }
+
+            $diff_week_count = ($totalYearsWeekNumbers - $startWeekNumber + $endWeekNumber);
         }
         
 
