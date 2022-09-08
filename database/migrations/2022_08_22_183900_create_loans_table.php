@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
+            $table->string('invoice_no')->unique();
             $table->integer('customer_id')->unsigned();
             $table->decimal('amount',10,2)->default(0.00);
             $table->integer('period');
