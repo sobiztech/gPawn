@@ -32,8 +32,9 @@
                             <thead>
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>
-                                    <th class="wd-15p border-bottom-0">Customer Name</th>
-                                    <th class="wd-15p border-bottom-0">Mobile Number</th>
+                                    <th class="wd-10p border-bottom-0">Invice No</th>
+                                    <th class="wd-15p border-bottom-0"> Name</th>
+                                    <th class="wd-15p border-bottom-0">Mobile</th>
                                     <th class="wd-20p border-bottom-0">Amount</th>
                                     <th class="wd-15p border-bottom-0">Payable</th>
                                     <th class="wd-15p border-bottom-0">Total Payed</th>
@@ -45,6 +46,7 @@
                                @foreach ($payable as $row)
                                    <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $row->invoice_no }}</td>
                                         <td>{{ $row->customer_first_name }}</td>
                                         <td>{{ $row->phone_number }}</td>
                                         <td>{{ number_format((float)$row->amount, 2, '.', ',') }}</td>
@@ -52,10 +54,10 @@
                                         <td>{{ number_format((float)$row->total_payed, 2, '.', ',') }}</td>
                                         <td>{{ number_format((float)$row->till_balance_amount, 2, '.', ',') }}</td>
                                         <td>
-                                            <button class="btn btn-blue" href="">
+                                            <a class="btn btn-blue" href="{{ route('payment.create', ['id'=>$row->loan_id]) }}">
                                                 <span class="btn-icon-wrapper pr-2"> </span>
                                                 Payment
-                                            </button>
+                                            </a>
                                         </td>
                                    </tr>
                                @endforeach

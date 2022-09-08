@@ -19,7 +19,8 @@ class LoansController extends Controller
                     'c.phone_number'
                 )
                 ->leftJoin('customers as c', 'c.id', 'l.customer_id')
-                // ->where('l.loan_status', 0) // not complate
+                ->where('l.loan_status', 0) // not complate
+                ->orderByDesc('l.id')
                 ->get();
 
         return view('pages.loan.index', compact('loan'));
