@@ -54,9 +54,36 @@ class PaymentsController extends Controller
         return view('pages.payment', compact('payments', 'payment_types', 'customers'));
     }
 
-    public function create()
+    public function create($id)
     {
-        //
+        $loan_id = $id;
+
+        $details = DB::table('loans as l')
+                ->select(
+                    'l.id as loan_id',
+                    'l.amount as total_amount',
+                    'l.invoice_no',
+                    'c.customer_first_name'
+                )
+                ->leftJoin('customers as c', 'c.id', 'l.customer_id')
+                ->where('l.id', $loan_id)
+                ->first();
+
+        $total_payble = DB::table('payables')
+                ->where('payables.loan_id', $loan_id)
+                ->value(DB::raw('IFNULL(SUM(payables.amount),0)'));
+
+        $total_payed = DB::table('payments')
+                ->where('payments.loan_id', $loan_id)
+                ->value(DB::raw('IFNULL(SUM(payments.amount),0)'));
+
+        $details->total_payble = $total_payble - $total_payed;
+        $details->total_payed = $total_payed;
+
+        $payment_types = DB::table('payment_types')->get();
+
+
+        return view('pages.payment.payment', compact('details', 'payment_types'));
     }
 
     public function store(Request $request)
@@ -64,7 +91,7 @@ class PaymentsController extends Controller
         $id = $request->id;
 
         if ($id == 0) { // create
-            $request['invoice_no'] = 'inv-' . rand(0,9) . date('ymdHis');
+            $request['invoice_no'] = 'pay-' . rand(0,9) . date('ymdHis');
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no',
             ]);
@@ -80,21 +107,21 @@ class PaymentsController extends Controller
             $payment = payments::find($id);
         }
         
-        // try {        
-            $payment->date=$request->input('date');
-            $payment->customer_id=$request->input('customer_id');
-            $payment->amount=$request->input('amount');
-            $payment->payment_type_id=$request->input('payment_type_id');
-            $payment->user_id='1';
-            // $payment->user_id=$request->input('user_id');
-            $payment->description=$request->input('description');
+        try {        
+            $payment->date = $request->input('date');
+            $payment->loan_id = $request->input('loan_id');
+            $payment->amount = $request->input('amount');
+            $payment->payment_type_id = $request->input('payment_type_id');
+            $payment->emp_id = 1;  //Auth::user()->employee_id;
+            $payment->description = $request->input('description');
             $payment->save();
 
-            return redirect()->route('payment.index')->with('success', 'Payment ....');
+            return redirect()->route('payment.payable')->with('success', 'Payment ....');
 
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('payment.index')->with('error', 'error ....');
-        // }
+        } catch (\Throwable $th) {
+            return redirect()->route('payment.payable')->with('error', 'error ....');
+        }
+
     }
 
     public function show(payments $payments)
@@ -122,12 +149,14 @@ class PaymentsController extends Controller
         $payable = DB::table('loans as l')
             ->selectRaw('
                         l.id as loan_id, 
+                        l.invoice_no,
                         l.amount,
                         c.customer_first_name,
                         c.phone_number
                     ')
             ->leftJoin('customers as c', 'c.id', 'l.customer_id')
             ->where('l.loan_status', 0) // not complate
+            ->orderByDesc('l.id')
             ->get();
 
         foreach ($payable as $key) {

@@ -32,8 +32,9 @@
                             <thead>
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>
-                                    <th class="wd-15p border-bottom-0">Customer Name</th>
-                                    <th class="wd-15p border-bottom-0">Mobile Number</th>
+                                    <th class="wd-10p border-bottom-0">Invice No</th>
+                                    <th class="wd-15p border-bottom-0"> Name</th>
+                                    <th class="wd-15p border-bottom-0">Mobile</th>
                                     <th class="wd-15p border-bottom-0">Date</th>
                                     <th class="wd-20p border-bottom-0">Amount</th>
                                     <th class="wd-15p border-bottom-0">Period(Months)</th>
@@ -45,11 +46,12 @@
                                @foreach ($loan as $row)
                                    <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $row->invoice_no }}</td>
                                         <td>{{ $row->customer_first_name }}</td>
                                         <td>{{ $row->phone_number }}</td>
                                         <td>{{ $row->date }}</td>
-                                        <td>{{ $row->amount }}</td>
-                                        <td>{{ $row->period }}</td>
+                                        <td align="right">{{ number_format((float)$row->amount, 2, '.', ',') }}</td>
+                                        <td align="center">{{ $row->period }}</td>
                                         <td>{{ $row->pay_type }}</td>
                                         <td></td>
                                    </tr>
