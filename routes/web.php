@@ -18,6 +18,8 @@ use App\Http\Controllers\PaymentTypesController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\IndexController;
+
 
 
 /*
@@ -34,7 +36,7 @@ use App\Http\Controllers\SettingsController;
 Route::get('/', function () {
     return view('pages.index');
 });
-// Route::get('/index', [IndexController::class, 'index'])->name('index');
+Route::get('/dashboard', [IndexController::class, 'dashboard'])->name('index.dashboard');
 
 //store & update,show
 
