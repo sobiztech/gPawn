@@ -48,7 +48,7 @@
                                 <div class="form-group">
                                     <label>Loan Type<span class="text-danger">*</span></label>
                                     <div>
-                                        <select class="form-control select2-show-search form-select" required name="loan_type_id" id="loan_type_id">
+                                        <select class="form-control" required name="loan_type_id" id="loan_type_id">
                                             <option selected disabled value="">Choose...</option>
                                             @foreach ($loan_types as $item)
                                                 <option value="{{ $item->id }}"
@@ -198,8 +198,10 @@
 @endsection
 
 @section('scripts')
+<!-- INTERNAL SELECT2 JS -->
+<script src="{{asset('assets/plugins/select2/select2.full.min.js')}}"></script>
 {{-- <!-- SELECT2 JS --> --}}
-{{-- <script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script> --}}
+<script src="{{ asset('assets/js/formelementadvnced.js') }}"></script>
 
 <script>
     $(document).ready(function () {
