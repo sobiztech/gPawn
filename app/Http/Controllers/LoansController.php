@@ -51,7 +51,6 @@ class LoansController extends Controller
     public function store(Request $request)
     {
 
-
         $getExtaData = $this->getLoanPaymentDetailAjax($request);
         $total_payable = str_replace(',', '', $getExtaData['total_payable']);
         $monthly_payment = str_replace(',', '', $getExtaData['monthly_payment']);
@@ -72,8 +71,22 @@ class LoansController extends Controller
 
 
         if ($id == null) {
+            $nic_number = DB::table('customers')->where('id', $request->customer_id)->value('phone_number');
+            $last4Number = substr($nic_number,-4);
+            $request['invoice_no'] = date('ymdH') . 'L' . $last4Number;
+            
+            $this->validate($request, [
+                'invoice_no' => 'unique:loans,invoice_no',
+            ]);
+
             $loan = new loans();
+            $loan->invoice_no = $request->invoice_no;
+
         } else {
+            $this->validate($request, [
+                'invoice_no' => 'unique:loans,invoice_no,' .$id,
+            ]);
+
             $loan = loans::find($id);
         }
 
@@ -94,6 +107,7 @@ class LoansController extends Controller
             $loan->save();
 
             return redirect()->route('loan.index')->with('success', 'loan ....');
+
         } catch (\Throwable $th) {
 
             return redirect()->route('loan.index')->with('error', 'error ....');
