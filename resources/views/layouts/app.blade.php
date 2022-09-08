@@ -90,9 +90,7 @@
     <!-- APEXCHART JS -->
     <script src="{{asset('assets/js/apexcharts.js')}}"></script>
 
-    <!-- INTERNAL SELECT2 JS -->
-    <script src="{{asset('assets/plugins/select2/select2.full.min.js')}}"></script>
-
+    
     <!-- CHART-CIRCLE JS-->
     <script src="{{asset('assets/plugins/circle-progress/circle-progress.min.js')}}"></script>
 
