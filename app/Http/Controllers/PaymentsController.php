@@ -12,47 +12,86 @@ class PaymentsController extends Controller
 {
     public function index()
     {
-        $payments=DB::table('payments')
-        ->select('payments.id',
-        'payments.date', 
-        'payments.invoice_no', 
-        'payments.amount',
-        'payments.discount', 
-        'payments.description',
-        'payments.loan_id',
-        'payments.payment_type_id',
-        'payments.emp_id',
-        'payment_types.id AS pTID', 
-        'payment_types.payment_type_name',
-        'loans.id AS lID', 
-        'loans.date', 
-        'loans.amount', 
-        'loans.period', 
-        'loans.interest',
-        'loans.loan_end_date',
-        'loans.customer_id', 
-        'loans.loan_type_id', 
-        'loans.emp_id', 
-        'loans.description', 
-        'customers.id AS cID', 
-        'customers.customer_number', 
-        'customers.customer_first_name', 
-        'customers.customer_sur_name', 
-        'employees.id AS eID', 
-        'employees.employee_number', 
-        'employees.employee_first_name', 
-        'employees.employee_sur_name')
-        ->join('payment_types','payments.payment_type_id', '=', 'payment_types.id')
-        ->join('loans','payments.loan_id', '=', 'loans.id')
-        ->join('customers','loans.customer_id', '=', 'customers.id')
-        ->join('employees','payments.emp_id', '=', 'employees.id')
-        ->get();
+        $actvieLoans = DB::table('loans as l')
+                        ->selectRaw('
+                                    l.id as loan_id, 
+                                    l.invoice_no,
+                                    l.amount,
+                                    l.date,
+                                    c.customer_first_name,
+                                    c.phone_number
+                                ')
+                        ->leftJoin('customers as c', 'c.id', 'l.customer_id')
+                        ->where('l.loan_status', 0) // not complate
+                        ->orderByDesc('l.id')
+                        ->get();
 
-        $payment_types = DB::table('payment_types')->get();
-        $customers = DB::table('customers')->get();
-
-        return view('pages.payment', compact('payments', 'payment_types', 'customers'));
+        return view('pages.payment.paymentView', compact('actvieLoans'));
     }
+
+    // ajax
+    public function viewByLoanInAjax(Request $request)
+    {
+        $loanId = $request->loanId;
+        
+        $payment = DB::table('payments as p')
+                ->select(
+                    'p.invoice_no',
+                    'p.date',
+                    'p.amount',
+                    'p.description',
+                    'e.employee_first_name as buyer_name',
+                )
+                ->leftJoin('employees as e', 'e.id', 'p.emp_id')
+                ->where('p.loan_id', $loanId)
+                ->get();
+
+        return $payment;
+    }
+
+    // public function index()
+    // {
+    //     $payments=DB::table('payments')
+    //     ->select('payments.id',
+    //     'payments.date', 
+    //     'payments.invoice_no', 
+    //     'payments.amount',
+    //     'payments.discount', 
+    //     'payments.description',
+    //     'payments.loan_id',
+    //     'payments.payment_type_id',
+    //     'payments.emp_id',
+    //     'payment_types.id AS pTID', 
+    //     'payment_types.payment_type_name',
+    //     'loans.id AS lID', 
+    //     'loans.date', 
+    //     'loans.amount', 
+    //     'loans.period', 
+    //     'loans.interest',
+    //     'loans.loan_end_date',
+    //     'loans.customer_id', 
+    //     'loans.loan_type_id', 
+    //     'loans.emp_id', 
+    //     'loans.description', 
+    //     'customers.id AS cID', 
+    //     'customers.customer_number', 
+    //     'customers.customer_first_name', 
+    //     'customers.customer_sur_name', 
+    //     'employees.id AS eID', 
+    //     'employees.employee_number', 
+    //     'employees.employee_first_name', 
+    //     'employees.employee_sur_name')
+    //     ->join('payment_types','payments.payment_type_id', '=', 'payment_types.id')
+    //     ->join('loans','payments.loan_id', '=', 'loans.id')
+    //     ->join('customers','loans.customer_id', '=', 'customers.id')
+    //     ->join('employees','payments.emp_id', '=', 'employees.id')
+    //     ->get();
+
+    //     $payment_types = DB::table('payment_types')->get();
+    //     $customers = DB::table('customers')->get();
+
+    //     return view('pages.payment', compact('payments', 'payment_types', 'customers'));
+    // }
 
     public function create($id)
     {
@@ -124,25 +163,6 @@ class PaymentsController extends Controller
 
     }
 
-    public function show(payments $payments)
-    {
-        //
-    }
-
-    public function edit(payments $payments)
-    {
-        //
-    }
-
-    public function update(Request $request, payments $payments)
-    {
-        //
-    }
-
-    public function destroy(payments $payments)
-    {
-        //
-    }
 
     public function payable()
     {
