@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
-    
     public function index()
     {
-
         $customers = DB::table('customers')
             ->select('customers.id', 
             'customers.customer_number', 
@@ -37,11 +35,8 @@ class CustomersController extends Controller
         return view('pages.customer', compact('customers', 'customer_types'));
     }
 
-    
-   
     public function store(Request $request)
     {
-       
         $id = $request->id;
 
         if ($id == 0) { // create
@@ -82,13 +77,11 @@ class CustomersController extends Controller
             $customer->description = $request->input('description');
             $customer->save();
 
-            
             return redirect()->route('customer.index')->with('success', 'Customer ....');
 
         } catch (\Throwable $th) {
             
             return redirect()->route('customer.index')->with('error', 'error ....');
-            
         }
     }
 
