@@ -12,21 +12,22 @@ class PaymentsController extends Controller
 {
     public function index()
     {
-        $actvieLoans = DB::table('loans as l')
+        $finishLoans = DB::table('loans as l')
                         ->selectRaw('
                                     l.id as loan_id, 
                                     l.invoice_no,
                                     l.amount,
-                                    l.date,
+                                    l.date as start_date,
+                                    l.finished_at,
                                     c.customer_first_name,
                                     c.phone_number
                                 ')
                         ->leftJoin('customers as c', 'c.id', 'l.customer_id')
-                        ->where('l.loan_status', 0) // not complate
+                        ->where('l.loan_status', 1) // complate
                         ->orderByDesc('l.id')
                         ->get();
 
-        return view('pages.payment.paymentView', compact('actvieLoans'));
+        return view('pages.payment.finishPaymentView', compact('finishLoans'));
     }
 
     // ajax
@@ -170,6 +171,7 @@ class PaymentsController extends Controller
             ->selectRaw('
                         l.id as loan_id, 
                         l.invoice_no,
+                        l.date,
                         l.amount,
                         c.customer_first_name,
                         c.phone_number

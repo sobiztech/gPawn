@@ -6,7 +6,7 @@
 @section('content')
     <div class="page-header">
         <div>
-            <h1 class="page-title">Payments View</h1>
+            <h1 class="page-title">Finish Loans Payments View</h1>
         </div>
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
@@ -26,22 +26,24 @@
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>
                                     <th class="wd-10p border-bottom-0">Invice No</th>
+                                    <th class="wd-15p border-bottom-0">Start Date</th>
+                                    <th class="wd-15p border-bottom-0">Finished</th>
                                     <th class="wd-15p border-bottom-0"> Name</th>
                                     <th class="wd-15p border-bottom-0">Mobile</th>
                                     <th class="wd-20p border-bottom-0">Amount</th>
-                                    <th class="wd-15p border-bottom-0">Date</th>
                                     <th class="wd-10p border-bottom-0"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($actvieLoans as $row)
+                                @foreach ($finishLoans as $row)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $row->invoice_no }}</td>
+                                        <td>{{ $row->start_date }}</td>
+                                        <td>{{ date('Y-m-d', strtotime($row->finished_at))  }}</td>
                                         <td>{{ $row->customer_first_name }}</td>
                                         <td>{{ $row->phone_number }}</td>
                                         <td>{{ number_format((float) $row->amount, 2, '.', ',') }}</td>
-                                        <td>{{ $row->date }}</td>
                                         <td>
                                             <button class="btn btn-blue view" data-loan_id="{{ $row->loan_id }}">
                                                 <span class="btn-icon-wrapper pr-2"> </span>

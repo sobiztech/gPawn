@@ -74,7 +74,7 @@ Route::get('loan/get-payment-detail', [LoansController::class, 'getLoanPaymentDe
 //payment
 Route::get('paymenttype/show', [PaymentTypesController::class, 'index'])->name('paymenttype.index');
 Route::post('paymenttype/store', [PaymentTypesController::class, 'store'])->name('paymenttype.store');
-Route::get('payment/view', [PaymentsController::class, 'index'])->name('payment.index');
+Route::get('completed-payment/view', [PaymentsController::class, 'index'])->name('payment.index');
 Route::get('payment/ajax/view-by-loan', [PaymentsController::class, 'viewByLoanInAjax'])->name('payment.viewByLoanInAjax');
 Route::get('payment/create/{id}', [PaymentsController::class, 'create'])->name('payment.create');
 Route::post('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
