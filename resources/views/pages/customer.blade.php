@@ -49,7 +49,15 @@
                                         <td>{{ $row->customer_first_name }}</td>
                                         <td>{{ $row->nic }}</td>
                                         <td>{{ $row->phone_number }}</td>
-                                        <td>{{ $row->gender }}</td>
+                                        <td>
+                                            @if ($row->gender == 1)
+                                                Male
+                                            @elseif ($row->gender == 2)
+                                                Female
+                                            @else
+                                                Third gender
+                                            @endif
+                                        </td>
                                         <td>{{ $row->customer_type_name }}</td>
                                         <td>{{ $row->address }}</td>
                                         <td>
@@ -175,6 +183,7 @@
                                             <option selected disabled value="">Choose...</option>
                                             <option value="1">Male</option>
                                             <option value="2">Female</option>
+                                            <option value="3">Third gender</option>
                                         </select>
                                         <p style="color:Tomato"> @error('gender'){{ $message }} @enderror</p>
                                     </div>
@@ -293,7 +302,7 @@
         });
 
         // change status
-        $('#basic-datatable').on('click', '.changeStatus', function() {
+        $('#responsive-datatable').on('click', '.changeStatus', function() {
             var id = $(this).attr('data-id');
             var url = $(this).attr('data-url');
             var status = $(this).attr('data-is_active');

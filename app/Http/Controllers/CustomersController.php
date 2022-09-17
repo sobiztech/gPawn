@@ -29,6 +29,8 @@ class CustomersController extends Controller
             'customers.customer_type_id', 
             'customer_types.customer_type_name')
             ->leftJoin('customer_types','customers.customer_type_id', 'customer_types.id')
+            ->orderByDesc('customers.is_active')
+            ->orderByDesc('customers.id')
             ->get();
 
 
