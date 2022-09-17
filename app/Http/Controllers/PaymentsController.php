@@ -138,9 +138,11 @@ class PaymentsController extends Controller
 
     public function store(Request $request)
     {
+        
         $id = $request->id;
 
-        if ($id == 0) { // create
+        if ($id == null) { // create
+            
             $request['invoice_no'] = 'pay-' . rand(0,9) . date('ymdHis');
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no',
@@ -150,6 +152,7 @@ class PaymentsController extends Controller
             $payment->invoice_no = $request->invoice_no;
 
         } else { // update
+            
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no,' .$id,
             ]);
@@ -161,14 +164,25 @@ class PaymentsController extends Controller
             $payment->date = $request->input('date');
             $payment->loan_id = $request->input('loan_id');
             $payment->amount = $request->input('amount');
+            if (isset($request->close_loan)) {
+                $payment->discount = $request->input('discount');
+            }
             $payment->payment_type_id = $request->input('payment_type_id');
             $payment->emp_id = 1;  //Auth::user()->employee_id;
             $payment->description = $request->input('description');
             $payment->save();
 
-            // check loan fully payed
-            $checkLoancomplete = $this->checkLoancompletePayment($request->loan_id);
-
+            if (isset($request->close_loan)) { // this loan is close
+                $thisLoan = loans::find($request->input('loan_id'));
+                $thisLoan->finished_at = now();
+                $thisLoan->loan_status = 1;
+                $thisLoan->save();
+                
+            } else {
+                // check loan fully payed
+                $checkLoancomplete = $this->checkLoancompletePayment($request->loan_id);
+            }
+            
             return redirect()->route('payment.payable')->with('success', 'Payment ....');
 
         } catch (\Throwable $th) {
@@ -348,7 +362,7 @@ class PaymentsController extends Controller
 
         $id = $request->id;
 
-        if ($id == 0) { // create
+        if ($id == null) { // create
             $request['invoice_no'] = 'pay-' . rand(0,9) . date('ymdHis');
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no',
