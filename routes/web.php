@@ -80,6 +80,8 @@ Route::get('payment/create/{id}', [PaymentsController::class, 'create'])->name('
 Route::post('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
 Route::get('payable/view', [PaymentsController::class, 'payable'])->name('payment.payable');
 Route::get('payable/schedule', [PaymentsController::class, 'schedule'])->name('payment.schedule');
+Route::get('active-loans', [PaymentsController::class, 'activeLoans'])->name('payment.activeLoans');
+Route::post('collecter-payment/store', [PaymentsController::class, 'collecterPaymentStore'])->name('payment.collecterPaymentStore');
 
 //master
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
