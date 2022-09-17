@@ -19,8 +19,7 @@ use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\IndexController;
-
-
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,12 +73,14 @@ Route::get('loan/get-payment-detail', [LoansController::class, 'getLoanPaymentDe
 //payment
 Route::get('paymenttype/show', [PaymentTypesController::class, 'index'])->name('paymenttype.index');
 Route::post('paymenttype/store', [PaymentTypesController::class, 'store'])->name('paymenttype.store');
-Route::get('payment/view', [PaymentsController::class, 'index'])->name('payment.index');
+Route::get('completed-payment/view', [PaymentsController::class, 'index'])->name('payment.index');
 Route::get('payment/ajax/view-by-loan', [PaymentsController::class, 'viewByLoanInAjax'])->name('payment.viewByLoanInAjax');
 Route::get('payment/create/{id}', [PaymentsController::class, 'create'])->name('payment.create');
 Route::post('payment/store', [PaymentsController::class, 'store'])->name('payment.store');
 Route::get('payable/view', [PaymentsController::class, 'payable'])->name('payment.payable');
 Route::get('payable/schedule', [PaymentsController::class, 'schedule'])->name('payment.schedule');
+Route::get('active-loans', [PaymentsController::class, 'activeLoans'])->name('payment.activeLoans');
+Route::post('collecter-payment/store', [PaymentsController::class, 'collecterPaymentStore'])->name('payment.collecterPaymentStore');
 
 //master
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
@@ -99,3 +100,8 @@ Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name
 Route::post('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
 
 Route::get('employee/status-change', [EmployeesController::class, 'statusChange'])->name('employee.status-change');
+
+
+
+// report
+Route::get('/collector-payment-view/report', [ReportController::class, 'collectorPaymentReport'])->name('collectorPaymentReport');

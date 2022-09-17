@@ -2,31 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\loans;
 use App\Models\Payable;
 use App\Models\payments;
 use App\Models\ScheduleRun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PaymentsController extends Controller
 {
     public function index()
     {
-        $actvieLoans = DB::table('loans as l')
+        $finishLoans = DB::table('loans as l')
                         ->selectRaw('
                                     l.id as loan_id, 
                                     l.invoice_no,
                                     l.amount,
-                                    l.date,
+                                    l.date as start_date,
+                                    l.finished_at,
                                     c.customer_first_name,
                                     c.phone_number
                                 ')
                         ->leftJoin('customers as c', 'c.id', 'l.customer_id')
-                        ->where('l.loan_status', 0) // not complate
+                        ->where('l.loan_status', 1) // complate
                         ->orderByDesc('l.id')
                         ->get();
 
-        return view('pages.payment.paymentView', compact('actvieLoans'));
+        return view('pages.payment.finishPaymentView', compact('finishLoans'));
     }
 
     // ajax
@@ -121,15 +124,25 @@ class PaymentsController extends Controller
 
         $payment_types = DB::table('payment_types')->get();
 
+        if (Session::has('admin_loan_payable')) { // admin side payment
+            return view('pages.payment.payment', compact('details', 'payment_types'));
+            
+        } elseif (Session::has('collecter_loan_payable')) {  // collecter side payment
+            return view('pages.collecter.collecterPayment', compact('details', 'payment_types'));
 
-        return view('pages.payment.payment', compact('details', 'payment_types'));
+        } else {
+            abort(500);
+        }
+
     }
 
     public function store(Request $request)
     {
+        
         $id = $request->id;
 
-        if ($id == 0) { // create
+        if ($id == null) { // create
+            
             $request['invoice_no'] = 'pay-' . rand(0,9) . date('ymdHis');
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no',
@@ -139,6 +152,7 @@ class PaymentsController extends Controller
             $payment->invoice_no = $request->invoice_no;
 
         } else { // update
+            
             $this->validate($request, [
                 'invoice_no' => 'unique:payments,invoice_no,' .$id,
             ]);
@@ -150,11 +164,25 @@ class PaymentsController extends Controller
             $payment->date = $request->input('date');
             $payment->loan_id = $request->input('loan_id');
             $payment->amount = $request->input('amount');
+            if (isset($request->close_loan)) {
+                $payment->discount = $request->input('discount');
+            }
             $payment->payment_type_id = $request->input('payment_type_id');
             $payment->emp_id = 1;  //Auth::user()->employee_id;
             $payment->description = $request->input('description');
             $payment->save();
 
+            if (isset($request->close_loan)) { // this loan is close
+                $thisLoan = loans::find($request->input('loan_id'));
+                $thisLoan->finished_at = now();
+                $thisLoan->loan_status = 1;
+                $thisLoan->save();
+                
+            } else {
+                // check loan fully payed
+                $checkLoancomplete = $this->checkLoancompletePayment($request->loan_id);
+            }
+            
             return redirect()->route('payment.payable')->with('success', 'Payment ....');
 
         } catch (\Throwable $th) {
@@ -166,10 +194,16 @@ class PaymentsController extends Controller
 
     public function payable()
     {
+
+        Session::forget('collecter_loan_payable');
+        Session::put('admin_loan_payable', "hksNhsiiMatgMjM0NTY3ODkwIiwibmFtZSI6I1234");
+        
+
         $payable = DB::table('loans as l')
             ->selectRaw('
                         l.id as loan_id, 
                         l.invoice_no,
+                        l.date,
                         l.amount,
                         c.customer_first_name,
                         c.phone_number
@@ -280,5 +314,110 @@ class PaymentsController extends Controller
         }
 
         return "Run Shedule Scussfuly";
+    }
+
+    // collector view
+    public function activeLoans()
+    {
+
+        Session::forget('admin_loan_payable');
+        Session::put('collecter_loan_payable', "hksNhsiiMatgMjM0NTY3ODkwIiwibmFtZSI6Ikpva");
+        
+        $payable = DB::table('loans as l')
+            ->selectRaw('
+                        l.id as loan_id, 
+                        l.invoice_no,
+                        l.date,
+                        l.amount,
+                        c.customer_first_name,
+                        c.phone_number
+                    ')
+            ->leftJoin('customers as c', 'c.id', 'l.customer_id')
+            ->where('l.loan_status', 0) // not complate
+            ->orderByDesc('l.id')
+            ->get();
+
+        foreach ($payable as $key) {
+            $loan_id = $key->loan_id;
+
+            $total_payble = DB::table('payables')
+                ->where('payables.loan_id', $loan_id)
+                ->value(DB::raw('IFNULL(SUM(payables.amount),0)'));
+
+            $total_payed = DB::table('payments')
+                ->where('payments.loan_id', $loan_id)
+                ->value(DB::raw('IFNULL(SUM(payments.amount),0)'));
+
+            $key->total_payble = $total_payble;
+            $key->total_payed = $total_payed;
+            $key->till_balance_amount = $total_payble - $total_payed;
+        }
+
+        return view('pages.collecter.activeLoans', compact('payable'));
+    }
+
+    // collector payment save
+    public function collecterPaymentStore(Request $request)
+    {
+
+        $id = $request->id;
+
+        if ($id == null) { // create
+            $request['invoice_no'] = 'pay-' . rand(0,9) . date('ymdHis');
+            $this->validate($request, [
+                'invoice_no' => 'unique:payments,invoice_no',
+            ]);
+
+            $payment = new payments();
+            $payment->invoice_no = $request->invoice_no;
+
+        } else { // update
+            $this->validate($request, [
+                'invoice_no' => 'unique:payments,invoice_no,' .$id,
+            ]);
+
+            $payment = payments::find($id);
+        }
+        
+        try {        
+            $payment->date = $request->input('date');
+            $payment->loan_id = $request->input('loan_id');
+            $payment->amount = $request->input('amount');
+            $payment->payment_type_id = $request->input('payment_type_id');
+            $payment->emp_id = 1;  //Auth::user()->employee_id;
+            $payment->description = $request->input('description');
+            $payment->save();
+
+            // check loan fully payed
+            $checkLoancomplete = $this->checkLoancompletePayment($request->loan_id);
+
+            return redirect()->route('payment.activeLoans')->with('success', 'Payment success fully ....');
+
+        } catch (\Throwable $th) {
+            return redirect()->route('payment.activeLoans')->with('error', 'error ....');
+        }
+
+    }
+
+    // check loan complete payment
+    public function checkLoancompletePayment($loanId)
+    {
+        try {
+            $tillTotalPay = DB::table('payments')
+                        ->where('payments.loan_id', $loanId)
+                        ->value(DB::raw('IFNULL(SUM(payments.amount),0)'));
+    
+            $thisLoan = loans::find($loanId);
+            if ($tillTotalPay >= $thisLoan->total_payable) {  // payed loan full amount
+                $thisLoan->finished_at = now();
+                $thisLoan->loan_status = 1;
+                $thisLoan->save();
+            }
+
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+
     }
 }
