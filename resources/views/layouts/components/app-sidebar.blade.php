@@ -103,7 +103,7 @@
                                 <ul class="slide-menu">
                                     <!-- <li class="side-menu-label1"><a href="javascript:void(0)">Customer</a></li> -->
                                     <li><a href="{{ route('payment.activeLoans') }}" class="slide-item">Active Loans</a></li>
-                                    <li><a href="{{ route('blacklist.index') }}" class="slide-item">Collection View</a></li>
+                                    <li><a href="{{ route('collectorPaymentReport') }}" class="slide-item">Collection View</a></li>
                                 </ul>
                             </li>
 

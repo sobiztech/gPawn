@@ -19,8 +19,7 @@ use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\IndexController;
-
-
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,3 +100,8 @@ Route::get('customertype/show', [CustomerTypesController::class, 'index'])->name
 Route::post('customertype/store', [CustomerTypesController::class, 'store'])->name('customertype.store');
 
 Route::get('employee/status-change', [EmployeesController::class, 'statusChange'])->name('employee.status-change');
+
+
+
+// report
+Route::get('/collector-payment-view/report', [ReportController::class, 'collectorPaymentReport'])->name('collectorPaymentReport');
