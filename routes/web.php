@@ -81,6 +81,7 @@ Route::get('payable/view', [PaymentsController::class, 'payable'])->name('paymen
 Route::get('payable/schedule', [PaymentsController::class, 'schedule'])->name('payment.schedule');
 Route::get('active-loans', [PaymentsController::class, 'activeLoans'])->name('payment.activeLoans');
 Route::post('collecter-payment/store', [PaymentsController::class, 'collecterPaymentStore'])->name('payment.collecterPaymentStore');
+Route::get('get-details-print', [PaymentsController::class, 'getDetailsForPrintAjax'])->name('payment.getDetailsForPrintAjax');
 
 //master
 Route::get('property/show', [PropertiesController::class, 'index'])->name('property.index');
@@ -105,3 +106,37 @@ Route::get('employee/status-change', [EmployeesController::class, 'statusChange'
 
 // report
 Route::get('/collector-payment-view/report', [ReportController::class, 'collectorPaymentReport'])->name('collectorPaymentReport');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::view('/print-bill/view', 'pages.billPrint.billPrint');

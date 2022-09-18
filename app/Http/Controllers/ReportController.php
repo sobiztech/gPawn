@@ -21,9 +21,11 @@ class ReportController extends Controller
                         'p.invoice_no as payment_invoice_no',
                         'p.amount',
                         'p.date',
-                        'p.description'
+                        'p.description',
+                        'e.employee_first_name as collecter_name'
                     )
                     ->leftJoin('loans as l', 'l.id', 'p.loan_id')
+                    ->leftJoin('employees as e', 'e.id', 'p.emp_id')
                     ->where('p.emp_id', $loginCollectorEmpId)
                     ->whereDate('p.date', '>=', $fromDate)
                     ->whereDate('p.date', '<=', $toDate)
