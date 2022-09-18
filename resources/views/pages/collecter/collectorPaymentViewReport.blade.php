@@ -52,6 +52,7 @@
                                     <th class="wd-10p border-bottom-0">Loan Invice</th>
                                     <th class="wd-10p border-bottom-0">Payment Invice</th>
                                     <th class="wd-20p border-bottom-0">Amount</th>
+                                    <th class="wd-20p border-bottom-0">Collector Name</th>
                                     <th class="wd-15p border-bottom-0">description</th>
                                 </tr>
                             </thead>
@@ -72,6 +73,7 @@
                                         <td>{{ $row->loan_invoice_no }}</td>
                                         <td>{{ $row->payment_invoice_no }}</td>
                                         <td align="right">Rs. {{ number_format((float) $row->amount, 2, '.', ',') }}</td>
+                                        <td>{{ $row->collecter_name }}</td>
                                         <td>{{ $row->description }}</td>
                                     </tr>
                                 @endforeach
