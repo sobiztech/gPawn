@@ -65,6 +65,7 @@
                                     <th align="right">Rs.
                                         {{ number_format((float) $collection->sum('amount'), 2, '.', ',') }}</th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                                 @foreach ($collection as $row)
                                     <tr>
