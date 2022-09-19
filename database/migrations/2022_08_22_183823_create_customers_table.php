@@ -26,10 +26,12 @@ return new class extends Migration
             $table->string('email',50)->unique()->nullable();
             $table->longText('address');
             $table->longText('image')->nullable();
+            $table->integer('black_list_id');
             $table->integer('is_active');
             $table->longText('description')->nullable();
             $table->timestamps();
             $table->foreign('customer_type_id')->references('id')->on('customer_types')->onDelete('cascade');
+            $table->foreign('black_list_id')->references('id')->on('black_lists')->onDelete('cascade');
         });
     }
 

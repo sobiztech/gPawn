@@ -57,6 +57,7 @@ Route::post('setting/store', [SettingsController::class, 'store'])->name('settin
 //blacklist
 Route::get('blacklist/show', [BlackListsController::class, 'index'])->name('blacklist.index');
 Route::post('blacklist/store', [BlackListsController::class, 'store'])->name('blacklist.store');
+Route::post('blacklist/delete', [BlackListsController::class, 'delete'])->name('blacklist.delete');
 Route::get('blacklisttype/show', [BlackListTypesController::class, 'index'])->name('blacklisttype.index');
 Route::post('blacklisttype/store', [BlackListTypesController::class, 'store'])->name('blacklisttype.store');
 

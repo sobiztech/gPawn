@@ -11,22 +11,24 @@ class CustomersController extends Controller
     public function index()
     {
         $customers = DB::table('customers')
-            ->select('customers.id', 
-            'customers.customer_number', 
-            'customers.customer_first_name', 
-            'customers.customer_sur_name', 
-            'customers.nic',
-            'customers.date_of_birth',
-            'customers.gender', 
-            'customers.phone_number', 
-            'customers.email', 
-            'customers.address', 
-            'customers.image', 
-            'customers.is_active', 
-            'customers.description', 
-            'customers.customer_type_id', 
-            'customer_types.customer_type_name')
-            ->leftJoin('customer_types','customers.customer_type_id', 'customer_types.id')
+            ->select(
+                'customers.id',
+                'customers.customer_number',
+                'customers.customer_first_name',
+                'customers.customer_sur_name',
+                'customers.nic',
+                'customers.date_of_birth',
+                'customers.gender',
+                'customers.phone_number',
+                'customers.email',
+                'customers.address',
+                'customers.image',
+                'customers.is_active',
+                'customers.description',
+                'customers.customer_type_id',
+                'customer_types.customer_type_name'
+            )
+            ->leftJoin('customer_types', 'customers.customer_type_id', 'customer_types.id')
             ->get();
 
 
@@ -37,33 +39,46 @@ class CustomersController extends Controller
 
     public function store(Request $request)
     {
+        // return  $request;
         $id = $request->id;
 
         if ($id == 0) { // create
-            $request['customer_number'] = 'cus-' . rand(0,9) . date('ymdHis');
+            $request['customer_number'] = 'cus-' . rand(0, 9) . date('ymdHis');
 
-
-            $this->validate($request, [
-                'email' => 'unique:customers,email',
-                'nic' => 'required|min:10|max:12|unique:customers,nic',
-                'customer_number' => 'required|unique:customers,customer_number'
-            ]);
+            if ($request['email'] == null) {
+                $this->validate($request, [
+                    'nic' => 'required|min:10|max:12|unique:customers,nic',
+                    'customer_number' => 'required|unique:customers,customer_number'
+                ]);
+            } else {
+                $this->validate($request, [
+                    'email' => 'unique:customers,email',
+                    'nic' => 'required|min:10|max:12|unique:customers,nic',
+                    'customer_number' => 'required|unique:customers,customer_number'
+                ]);
+            }
 
             $customer = new customers();
             $customer->customer_number = $request->customer_number;
             $customer->is_active = 1;
-
         } else { // update
-            $this->validate($request, [
-                'email' => 'unique:customers,email,' .$id,
-                'nic' => 'required|min:10|max:12|unique:customers,nic,' .$id
-            ]);
+
+            if ($request['email'] == null) {
+                $this->validate($request, [
+                    'nic' => 'required|min:10|max:12|unique:customers,nic,' . $id
+                ]);
+            } else {
+                $this->validate($request, [
+                    'email' => 'unique:customers,email,' . $id,
+                    'nic' => 'required|min:10|max:12|unique:customers,nic,' . $id
+                ]);
+            }
 
             $customer = customers::find($id);
         }
-        
-        try {        
-        
+
+        try {
+
             $customer->customer_first_name = $request->input('customer_first_name');
             $customer->customer_sur_name = $request->input('customer_sur_name');
             $customer->customer_type_id = $request->input('customer_type_id');
@@ -74,18 +89,18 @@ class CustomersController extends Controller
             $customer->email = $request->input('email');
             // $customer->image = $request->file('image');
             $customer->address = $request->input('address');
+            $customer->black_list_type_id = 0;
+            $customer->is_active = $request->input('is_active');
             $customer->description = $request->input('description');
             $customer->save();
 
             return redirect()->route('customer.index')->with('success', 'Customer ....');
-
         } catch (\Throwable $th) {
-            
+
             return redirect()->route('customer.index')->with('error', 'error ....');
         }
     }
 
-   
     // status change
     public function statusChange(Request $request)
     {
@@ -105,9 +120,13 @@ class CustomersController extends Controller
         return 'Done';
     }
 
-    
     public function destroy(customers $customers)
     {
-        //
+        
+    }
+
+    //Reports
+    public function customerDetail()
+    {
     }
 }

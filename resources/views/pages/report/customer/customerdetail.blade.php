@@ -12,6 +12,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0);">Report</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Customer</li>
+                <li class="breadcrumb-item active" aria-current="page">Customer Detail</li>
             </ol>
         </div>
     </div>
@@ -22,7 +23,7 @@
                 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
                             <thead>
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>

@@ -25,7 +25,7 @@
                                 <li class="col-lg-4 mb-2">
                                     <a class="btn btn-country btn-lg btn-block">
                                         <span class="country-selector"><img alt="india" src="{{asset('assets/images/flags/india_flag.jpg')}}" class="me-2 language"></span>India
-                                </a>
+                                    </a>
                                 </li>
                                 <li class="col-lg-4 mb-2">
                                     <a class="btn btn-country btn-lg btn-block">
@@ -65,7 +65,7 @@
                                 <li class="col-lg-4 mb-2">
                                     <a class="btn btn-country btn-lg btn-block">
                                         <span class="country-selector"><img alt="china" src="{{asset('assets/images/flags/china_flag.jpg')}}" class="me-2 language"></span>China
-                                </a>
+                                    </a>
                                 </li>
                                 <li class="col-lg-4 mb-2">
                                     <a class="btn btn-country btn-lg btn-block">
