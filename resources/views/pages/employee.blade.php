@@ -28,7 +28,7 @@
                 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
                             <thead>
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>
@@ -53,7 +53,13 @@
                                         <td>{{ $row->department_name }}</td>
                                         <td>{{ $row->role_name }}</td>
                                         <td>{{ $row->nic }}</td>
-                                        <td>{{ $row->gender }}</td>
+                                        <td>
+                                            @if ($row->gender==1)
+                                                Male
+                                            @else
+                                                Female
+                                            @endif
+                                        </td>
                                         <td>{{ $row->phone_number }}</td>
                                         <td>{{ $row->address }}</td>
                                         <td>
@@ -83,6 +89,7 @@
                                             data-address="{{ $row->address }}" 
                                             data-contract_start_date="{{ $row->contract_start_date }}" 
                                             data-contract_end_date="{{ $row->contract_end_date }}" 
+                                            data-is_active="{{ $row->is_active }}" 
                                             data-description="{{ $row->description }}">
                                                 <i style="color:rgb(226, 210, 210);cursor: pointer" class="fa fa-edit"></i>
                                             </a>
@@ -160,7 +167,7 @@
                                         <select class="form-select" required name="department_id" id="department_id">
                                             <option selected disabled value="">Choose...</option>
                                             @foreach ($departments as $item)
-                                            <option class="departments department_{{ $item->id }}" value="{{ $item->id }}" {{ (old('department_id') == $item->id) ? 'selected' : '' }}>{{ $item->department_name }}</option>
+                                            <option class="departments department_{{ $item->property_id }}" value="{{ $item->id }}" {{ (old('department_id') == $item->id) ? 'selected' : '' }}>{{ $item->department_name }}</option>
                                             @endforeach
                                         </select>
                                         <p style="color:Tomato"> @error('department_id'){{ $message }} @enderror</p>
@@ -245,7 +252,7 @@
                                 <div class="form-group">
                                     <label>Address<span class="text-danger">*</span></label>
                                     <div>
-                                        <textarea type="text" class="form-control" rows="1" id="address"
+                                        <textarea type="text" class="form-control" rows="1" id="address" required
                                             name="address"
                                             placeholder="Enter the address">{{ old('address') }}</textarea>
                                     </div>
@@ -259,7 +266,7 @@
                                     <label >Contract Sign Date<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="date" class="form-control" id="contract_start_date" name="contract_start_date"
-                                             value="{{ old('contract_start_date') }}" required max="{{ date('Y-m-d') }}"/>
+                                             value="{{ old('contract_start_date') }}" required/>
                                         <p style="color:Tomato"> @error('contract_start_date'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
@@ -270,12 +277,25 @@
                                     <label >Contract End Date<span class="text-danger">*</span></label>
                                     <div>
                                         <input type="date" class="form-control" id="contract_end_date" name="contract_end_date"
-                                             value="{{ old('contract_end_date') }}" required max="{{ date('Y-m-d') }}"/>
+                                             value="{{ old('contract_end_date') }}" required/>
                                         <p style="color:Tomato"> @error('contract_end_date'){{ $message }} @enderror</p>
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label >Status<span class="text-danger">*</span></label>
+                                    <div>
+                                        <select class="form-select" required name="is_active" id="is_active">
+                                            <!-- <option selected disabled value="">Choose...</option> -->
+                                            <option value="1">Active</option>
+                                            <option value="2">Inactive</option>
+                                        </select>
+                                        <p style="color:Tomato"> @error('is_active'){{ $message }} @enderror</p>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -291,7 +311,6 @@
                             </div>
                         </div>
                           
-
                         <div class="form-group" align="right">
                             <button type="reset" class="btn btn-danger">Reset</button>
                             <button type="submit" class="btn btn-success">Save</button>
@@ -340,6 +359,7 @@
             $("#role_id").val('');
             $("#department_id").val('');
             $("#property_id").val('');
+            $("#is_active").val('');
 
             $('#createFormModal').html('Create Employee');
             $('p').html('');
@@ -360,6 +380,7 @@
             $("#address").val($(this).attr('data-address'));
             $("#contract_start_date").val($(this).attr('data-contract_start_date'));
             $("#contract_end_date").val($(this).attr('data-contract_end_date'));
+            $("#is_active").val($(this).attr('data-is_active'));
             $("#description").val($(this).attr('data-description'));
             $("#role_id").val($(this).attr('data-role_id'));
             $("#department_id").val($(this).attr('data-department_id'));
@@ -410,8 +431,8 @@
 
         $("#property_id").change(function(){
             $('.departments').hide();
-            var category_id =  $("#property_id").val();
-            $('.department_'+category_id).show();
+            var property_id =  $("#property_id").val();
+            $('.department_'+property_id).show();
         });
         
     });

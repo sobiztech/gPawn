@@ -11,20 +11,8 @@
         <!-- SIDE-MENU JS -->
         <script src="{{asset('assets/plugins/sidemenu/sidemenu.js')}}"></script>
 
-        <!-- Perfect SCROLLBAR JS-->
-        <script src="{{asset('assets/plugins/p-scroll/perfect-scrollbar.js')}}"></script>
-        <script src="{{asset('assets/plugins/p-scroll/pscroll.js')}}"></script>
-
-        <!-- STICKY JS -->
-        <script src="{{asset('assets/js/sticky.js')}}"></script>
-
-        @yield('scripts')
-
-        <!-- COLOR THEME JS -->
-        <script src="{{asset('assets/js/themeColors.js')}}"></script>
-
-        <!-- CUSTOM JS -->
-        <script src="{{asset('assets/js/custom.js')}}"></script>
+        <!-- INTERNAL SELECT2 JS -->
+        <!-- <script src="../assets/plugins/select2/select2.full.min.js"></script> -->
 
         <!-- DATA TABLE JS-->
         <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
@@ -40,3 +28,18 @@
         <script src="../assets/plugins/datatable/dataTables.responsive.min.js"></script>
         <script src="../assets/plugins/datatable/responsive.bootstrap5.min.js"></script>
         <script src="../assets/js/table-data.js"></script>
+        
+        <!-- Perfect SCROLLBAR JS-->
+        <script src="{{asset('assets/plugins/p-scroll/perfect-scrollbar.js')}}"></script>
+        <script src="{{asset('assets/plugins/p-scroll/pscroll.js')}}"></script>
+
+        <!-- STICKY JS -->
+        <script src="{{asset('assets/js/sticky.js')}}"></script>
+
+        @yield('scripts')
+
+        <!-- COLOR THEME JS -->
+        <script src="{{asset('assets/js/themeColors.js')}}"></script>
+
+        <!-- CUSTOM JS -->
+        <script src="{{asset('assets/js/custom.js')}}"></script>
