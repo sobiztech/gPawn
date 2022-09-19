@@ -178,9 +178,27 @@ class PaymentsController extends Controller
                 $checkLoancomplete = $this->checkLoancompletePayment($request->loan_id);
             }
 
-            return redirect()->route('payment.payable')->with('success', 'Payment ....');
+            // ajax responce
+            $data = [
+                'is_save' => true,
+                'loan_id' => $request->loan_id
+            ];
+            return $data;
+
+            // not use - 19-08-2022
+            // return redirect()->route('payment.payable')->with('success', 'Payment ....');
+
         } catch (\Throwable $th) {
-            return redirect()->route('payment.payable')->with('error', 'error ....');
+
+            // ajax responce
+            $data = [
+                'is_save' => false,
+                'loan_id' => null
+            ];
+            return $data;
+
+            // not use - 19-08-2022
+            // return redirect()->route('payment.payable')->with('error', 'error ....');
         }
     }
 
