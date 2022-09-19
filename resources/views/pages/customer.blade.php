@@ -28,7 +28,7 @@
                 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
+                        <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
                             <thead>
                                 <tr>
                                     <th class="wd-10p border-bottom-0">No</th>
@@ -50,10 +50,12 @@
                                         <td>{{ $row->nic }}</td>
                                         <td>{{ $row->phone_number }}</td>
                                         <td>
-                                            @if ($row->gender==1)
+                                            @if ($row->gender == 1)
                                                 Male
-                                            @else
+                                            @elseif ($row->gender == 2)
                                                 Female
+                                            @else
+                                                Third gender
                                             @endif
                                         </td>
                                         <td>{{ $row->customer_type_name }}</td>
@@ -81,7 +83,6 @@
                                             data-address="{{ $row->address }}" 
                                             data-description="{{ $row->description }}" 
                                             data-gender="{{ $row->gender }}" 
-                                            data-is_active="{{ $row->is_active }}" 
                                             data-customer_type_id="{{ $row->customer_type_id }}" >
                                                 <i style="color:rgb(226, 210, 210);cursor: pointer" class="fa fa-edit"></i>
                                             </a>
@@ -182,6 +183,7 @@
                                             <option selected disabled value="">Choose...</option>
                                             <option value="1">Male</option>
                                             <option value="2">Female</option>
+                                            <option value="3">Third gender</option>
                                         </select>
                                         <p style="color:Tomato"> @error('gender'){{ $message }} @enderror</p>
                                     </div>
@@ -205,25 +207,12 @@
                                 <div class="form-group">
                                     <label>Address<span class="text-danger">*</span></label>
                                     <div>
-                                        <textarea type="text" class="form-control" rows="1" id="address" required
+                                        <textarea type="text" class="form-control" rows="1" id="address"
                                             name="address"
                                             placeholder="Enter the address">{{ old('address') }}</textarea>
                                     </div>
                                     <p style="color:Tomato"> @error('address'){{ $message }} @enderror
                                     </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label >Status<span class="text-danger">*</span></label>
-                                    <div>
-                                        <select class="form-select" required name="is_active" id="is_active">
-                                            <!-- <option selected disabled value="">Choose...</option> -->
-                                            <option value="1">Active</option>
-                                            <option value="2">Inactive</option>
-                                        </select>
-                                        <p style="color:Tomato"> @error('is_active'){{ $message }} @enderror</p>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -285,7 +274,6 @@
             $("#description").val('');
             $("#gender").val('');
             $("#customer_type_id").val('');
-            $("#is_active").val('');
 
             $('#createFormModal').html('Create Customer');
             $('p').html('');
@@ -305,7 +293,6 @@
             $("#address").val($(this).attr('data-address'));
             $("#description").val($(this).attr('data-description'));
             $("#gender").val($(this).attr('data-gender'));
-            $("#is_active").val($(this).attr('data-is_active'));
             $("#customer_type_id").val($(this).attr('data-customer_type_id'));
 
             $('#createFormModal').html('Update Customer');
@@ -315,7 +302,7 @@
         });
 
         // change status
-        $('#basic-datatable').on('click', '.changeStatus', function() {
+        $('#responsive-datatable').on('click', '.changeStatus', function() {
             var id = $(this).attr('data-id');
             var url = $(this).attr('data-url');
             var status = $(this).attr('data-is_active');

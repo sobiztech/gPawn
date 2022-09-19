@@ -6,12 +6,12 @@
 @section('content')
     <div class="page-header">
         <div>
-            <h1 class="page-title">Payble</h1>
+            <h1 class="page-title">Actvie Loans</h1>
         </div>
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Payble</li>
+                <li class="breadcrumb-item active" aria-current="page">Actvie Loans</li>
             </ol>
         </div>
     </div>
@@ -19,12 +19,6 @@
     <div class="row row-sm">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header border-bottom">
-                    <button class="btn btn-blue" data-href="{{ route('payment.schedule') }}" id="runSchedule">
-                        <span class="btn-icon-wrapper pr-2"> </span>
-                        Run Schedule
-                    </button>
-                </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
@@ -45,7 +39,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($payable as $row)
-                                    <tr>
+                                    <tr >
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $row->invoice_no }}</td>
                                         <td>{{ $row->date }}</td>
@@ -120,41 +114,9 @@
 
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
 
     <script>
         $(document).ready(function() {
-            // run 
-            $('#runSchedule').on('click', function(event) {
-                event.preventDefault();
-
-                var route = $('#runSchedule').attr('data-href');
-
-                swal({
-                        title: 'Run Daily Scheduler ?',
-                        text: 'Run Scheduler Now !',
-                        icon: 'warning',
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            $.ajax({
-                                url: route,
-                                method: 'get',
-                                data: {},
-                                success: function(res) {
-                                    swal('Poof! Run Scheduler !', {
-                                        icon: 'success',
-                                        timer: 1000,
-                                    });
-                                    location.reload();
-                                }
-                            });
-                        }
-                    });
-            });
 
             // view payments
             $('.view').on('click', function(event) {
