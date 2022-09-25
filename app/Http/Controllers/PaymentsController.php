@@ -449,7 +449,7 @@ class PaymentsController extends Controller
     {
         $loanId = $request->loanId;
 
-        // try {
+        try {
 
             $imageURL = "https://w7.pngwing.com/pngs/799/755/png-transparent-loan-money-bank-finance-for-business-bank-blue-payment-logo.png";
             $name = "Loan";
@@ -488,11 +488,11 @@ class PaymentsController extends Controller
                 'tillTotalPay' => $tillTotalPay
             ];
 
-        // } catch (\Throwable $th) {
-        //     $body = [
-        //         'is_success' => false
-        //     ];
-        // }
+        } catch (\Throwable $th) {
+            $body = [
+                'is_success' => false
+            ];
+        }
 
         return $body;
     }

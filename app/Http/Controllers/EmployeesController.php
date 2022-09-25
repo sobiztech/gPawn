@@ -35,9 +35,9 @@ class EmployeesController extends Controller
         'departments.property_id',
         'roles.id AS rID', 
         'roles.role_name')
-        ->join('departments','employees.department_id', '=', 'departments.id')
-        ->join('properties','departments.property_id', '=', 'properties.id')
-        ->join('roles','employees.role_id', '=', 'roles.id')
+        ->leftJoin('departments','employees.department_id', '=', 'departments.id')
+        ->leftJoin('properties','departments.property_id', '=', 'properties.id')
+        ->leftJoin('roles','employees.role_id', '=', 'roles.id')
         ->get();
 
         $properties = DB::table('properties')->select('id', 'property_name')->get();
@@ -47,11 +47,7 @@ class EmployeesController extends Controller
         return view('pages.employee', compact('employees', 'properties', 'departments', 'roles'));
     }
 
-    public function create()
-    {
-        //
-    }
-
+    
     public function store(Request $request)
     {
         $id = $request->id;
@@ -125,23 +121,4 @@ class EmployeesController extends Controller
         return 'Done';
     }
 
-    public function show(employees $employees)
-    {
-        //
-    }
-
-    public function edit(employees $employees)
-    {
-        //
-    }
-
-    public function update(Request $request, employees $employees)
-    {
-        //
-    }
-
-    public function destroy(employees $employees)
-    {
-        //
-    }
 }

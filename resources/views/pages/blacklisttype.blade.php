@@ -65,7 +65,7 @@
 @section('modal')
     {{-- create & update model --}}
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createFormModal">Create Black List Type</h5>
@@ -80,7 +80,7 @@
 
                         <div class="row">
 
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Name<span class="text-danger">*</span></label>
                                     <div>
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Description</label>
                                     <div>
@@ -117,8 +117,6 @@
 @endsection
 
 @section('scripts')
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 <script>
     $(document).ready(function () {
