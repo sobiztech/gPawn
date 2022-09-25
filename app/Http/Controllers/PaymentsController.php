@@ -449,13 +449,14 @@ class PaymentsController extends Controller
     {
         $loanId = $request->loanId;
 
-        try {
+        // try {
 
             $imageURL = "https://w7.pngwing.com/pngs/799/755/png-transparent-loan-money-bank-finance-for-business-bank-blue-payment-logo.png";
             $name = "Loan";
             $phoneNumber = "+94 77 562312";
             $date = date('Y-m-d');
             $time = date('h:i:s a');
+            $footerMassage = "technical solutions - sobiztech (pvt) ltd";
 
             $loanDetails = DB::table('loans')
                 ->select('invoice_no as loan_invoice_no', 'amount as loan_amount', 'loan_status')
@@ -463,7 +464,7 @@ class PaymentsController extends Controller
                 ->first();
 
             $lastPayment = DB::table('payments as p')
-                ->select('p.invoice_no as payment_invoice_no', 'p.amount as payment_amount', 'e.employee_first_name as collecter_name', 'pt.payment_type_name')
+                ->select('p.invoice_no as payment_invoice_no', 'p.amount as payment_amount', 'p.discount as discount_amount', 'e.employee_first_name as collecter_name', 'pt.payment_type_name')
                 ->leftJoin('employees as e', 'e.id', 'p.emp_id')
                 ->leftJoin('payment_types as pt', 'pt.id', 'p.payment_type_id')
                 ->where('p.loan_id', $loanId)
@@ -481,16 +482,17 @@ class PaymentsController extends Controller
                 'phoneNumber' => $phoneNumber,
                 'date' => $date,
                 'time' => $time,
+                'footerMassage' => $footerMassage,
                 'loanDetails' => $loanDetails,
                 'lastPayment' => $lastPayment,
                 'tillTotalPay' => $tillTotalPay
             ];
 
-        } catch (\Throwable $th) {
-            $body = [
-                'is_success' => false
-            ];
-        }
+        // } catch (\Throwable $th) {
+        //     $body = [
+        //         'is_success' => false
+        //     ];
+        // }
 
         return $body;
     }
