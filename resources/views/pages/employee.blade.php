@@ -372,20 +372,16 @@
 
     <script>
         $(document).ready(function() {
-
             // show model back end validate
             if (!@json($errors->isEmpty())) {
                 $('#createModal').modal('show');
-
                 var id = $('#id').val();
-
                 if (id == 0) {
                     $('#createFormModal').html('Create Employee');
                 } else {
                     $('#createFormModal').html('Update Employee');
                 }
             }
-
             // create
             $('#create_').click(function() {
                 $("#id").val(0);
@@ -403,15 +399,11 @@
                 $("#role_id").val('');
                 $("#department_id").val('');
                 $("#property_id").val('');
-
                 $('#createFormModal').html('Create Employee');
                 $('p').html('');
-
                 showDepartment(); // call function
-
                 $('#createModal').modal('show');
             });
-
             // update
             $('#responsive-datatable').on('click', '.edit', function() {
                 $("#id").val($(this).attr('data-id'));
@@ -429,21 +421,16 @@
                 $("#role_id").val($(this).attr('data-role_id'));
                 $("#department_id").val($(this).attr('data-department_id'));
                 $("#property_id").val($(this).attr('data-property_id'));
-
                 $('#createFormModal').html('Update Employee');
                 $('p').html('');
-
                 showDepartment(); // call function
-
                 $('#createModal').modal('show');
             });
-
             // change status
             $('#responsive-datatable').on('click', '.changeStatus', function() {
                 var id = $(this).attr('data-id');
                 var url = $(this).attr('data-url');
                 var status = $(this).attr('data-is_active');
-
                 swal({
                         title: 'Are you sure?',
                         text: 'Change Employee Status !',
@@ -471,18 +458,15 @@
                         }
                     });
             });
-
             //Dropdown change -Property -> Department
             $("#property_id").change(function() {
                 showDepartment();
             });
-
             function showDepartment() {
                 $('.departments').hide();
                 var category_id = $("#property_id").val();
                 $('.department_' + category_id).show();
             }
-
         });
     </script>
 @endsection

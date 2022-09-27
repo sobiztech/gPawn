@@ -41,7 +41,7 @@ class EmployeesController extends Controller
         ->get();
 
         $properties = DB::table('properties')->select('id', 'property_name')->get();
-        $departments = DB::table('departments')->select('id', 'department_name')->get();
+        $departments = DB::table('departments')->select('id', 'department_name','property_id')->get();
         $roles = DB::table('roles')->select('id', 'role_name')->get();
 
         return view('pages.employee', compact('employees', 'properties', 'departments', 'roles'));
@@ -56,21 +56,40 @@ class EmployeesController extends Controller
             $request['employee_number'] = 'emp-' . rand(0,9) . date('ymdHis');
 
 
-            $this->validate($request, [
-                'email' => 'unique:employees,email',
-                'nic' => 'required|min:10|max:12|unique:employees,nic',
-                'employee_number' => 'required|unique:employees,employee_number'
-            ]);
+            if($request['email']==null)
+            {
+                $this->validate($request, [
+                    'nic' => 'required|min:10|max:12|unique:employees,nic',
+                    'employee_number' => 'required|unique:employees,employee_number'
+                ]);
+            }
+            else
+            {
+                $this->validate($request, [
+                    'email' => 'unique:employees,email',
+                    'nic' => 'required|min:10|max:12|unique:employees,nic',
+                    'employee_number' => 'required|unique:employees,employee_number'
+                ]);
+            }
 
             $employee = new employees();
             $employee->employee_number = $request->employee_number;
-            $employee->is_active = 1;
 
         } else { // update
-            $this->validate($request, [
-                'email' => 'unique:employees,email,' .$id,
-                'nic' => 'required|min:10|max:12|unique:employees,nic,' .$id
-            ]);
+
+            if($request['email']==null)
+            {
+                $this->validate($request, [
+                    'nic' => 'required|min:10|max:12|unique:employees,nic,' .$id
+                ]);
+            }
+            else
+            {
+                $this->validate($request, [
+                    'email' => 'unique:employees,email,' .$id,
+                    'nic' => 'required|min:10|max:12|unique:employees,nic,' .$id
+                ]);
+            }
 
             $employee = employees::find($id);
         }
@@ -89,6 +108,7 @@ class EmployeesController extends Controller
             // $employee->image=$request->file('image');
             $employee->contract_start_date = $request->input('contract_start_date');
             $employee->contract_end_date = $request->input('contract_end_date');
+            $employee->is_active = $request->input('is_active');
             $employee->description=$request->input('description');
             $employee->save();
 

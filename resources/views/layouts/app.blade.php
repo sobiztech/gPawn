@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-<!-- This "app.blade.php" master page is used for all the pages content present in "views/livewire" except "custom" and "switcher" pages -->
 
 <head>
 
@@ -8,9 +7,9 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="gStudent MAnagement System">
-    <meta name="author" content="SOBIZTECH PVT LTD">
-    <meta name="keywords" content="Student MAnagement System, Software, Srilanka, admin dashboard, admin template, admin, bootstrap 5, laravel admin, laravel admin dashboard template, laravel ui template, laravel admin panel, admin panel, laravel admin dashboard, laravel template, admin ui dashboard">
+    <meta name="description" content="Wardhana Enterprises">
+    <meta name="author" content="sobiztech pvt ltd">
+    <meta name="keywords" content="Wardhana Enterprises, Micro Finance">
 
     @include('layouts.components.styles')
 
@@ -76,7 +75,7 @@
             <!-- CONTAINER CLOSED -->
         </div>
 
-        @include('layouts.components.modal')
+        <!-- @include('layouts.components.modal') -->
 
         @yield('modal')
 
@@ -90,14 +89,14 @@
     <!-- APEXCHART JS -->
     <script src="{{asset('assets/js/apexcharts.js')}}"></script>
 
-    
+
     <!-- CHART-CIRCLE JS-->
     <script src="{{asset('assets/plugins/circle-progress/circle-progress.min.js')}}"></script>
 
     <!-- INTERNAL DATA-TABLES JS-->
-    <script src="{{asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
+    <!-- <script src="{{asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('assets/plugins/datatable/js/dataTables.bootstrap5.js')}}"></script>
-    <script src="{{asset('assets/plugins/datatable/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/datatable/dataTables.responsive.min.js')}}"></script> -->
 
     <!-- INDEX JS -->
     <script src="{{asset('assets/js/index1.js')}}"></script>

@@ -28,7 +28,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                    <table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
                         <thead>
                             <tr>
                                 <th class="wd-10p border-bottom-0">No</th>
@@ -37,7 +37,7 @@
                                 <th class="wd-15p border-bottom-0">Email</th>
                                 <th class="wd-25p border-bottom-0">Address</th>
                                 <th class="wd-10p border-bottom-0">description</th>
-                                <th class="wd-10p border-bottom-0"></th>
+                                <th class="wd-10p border-bottom-0">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +50,13 @@
                                 <td>{{ $row->location }}</td>
                                 <td>{{ $row->description }}</td>
                                 <td>
-                                    <a class="btn btn-blue edit" title="Edit" data-id="{{ $row->id }}" data-property_name="{{ $row->property_name }}" data-phone_number="{{ $row->phone_number }}" data-email="{{ $row->email }}" data-location="{{ $row->location }}" data-description="{{ $row->description }}">
+                                    <a class="btn btn-blue edit" title="Edit" 
+                                    data-id="{{ $row->id }}" 
+                                    data-property_name="{{ $row->property_name }}" 
+                                    data-phone_number="{{ $row->phone_number }}" 
+                                    data-email="{{ $row->email }}" 
+                                    data-location="{{ $row->location }}" 
+                                    data-description="{{ $row->description }}">
                                         <i style="color:rgb(226, 210, 210);cursor: pointer" class="fa fa-edit"></i>
                                     </a>
                                 </td>
@@ -185,6 +191,7 @@
 
         // update
         $('.edit').click(function() {
+            console.log("HI");
             $("#id").val($(this).attr('data-id'));
             $("#property_name").val($(this).attr('data-property_name'));
             $("#phone_number").val($(this).attr('data-phone_number'));

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\black_lists;
+use App\Models\customers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,10 @@ class BlackListsController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
         $id = $request->id;
+        $cusID = $request->customer_id;
+        $blackListTypeID = $request->black_list_type_id;
 
         if ($id == 0) { // create
             $this->validate($request, [
@@ -62,6 +66,12 @@ class BlackListsController extends Controller
             $blackList->customer_id = $request->input('customer_id');
             $blackList->black_list_type_id = $request->input('black_list_type_id');
             $blackList->save();
+
+            // $black_lists_ID=$blackList->$id;
+            $customer = customers::find($cusID);
+            $customer->black_list_type_id = $blackListTypeID;
+            $customer->save();
+
 
             return redirect()->route('blacklist.index')->with('success', 'Black List ....');
         } catch (\Throwable $th) {

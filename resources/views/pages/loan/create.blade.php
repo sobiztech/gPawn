@@ -5,15 +5,18 @@
 
 @section('content')
     <div class="page-header">
+
         <div>
             <h1 class="page-title">Loan Create</h1>
         </div>
+
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Loan Create</li>
             </ol>
         </div>
+        
     </div>
 
     <div class="card">
@@ -25,12 +28,13 @@
                         @csrf
                         <input type="hidden" name="id" id="id" value="{{ old('id') }}">
                         <div class="row">
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Customer<span class="text-danger">*</span></label>
                                     <div>
                                         <select class="form-control select2-show-search form-select" required name="customer_id" id="customer_id">
-                                            <option selected disabled value="">Choose...</option>
+                                            <option selected disabled value="">Select</option>
                                             @foreach ($customers as $item)
                                                 <option value="{{ $item->id }}"
                                                     {{ old('customer_id') == $item->id ? 'selected' : '' }}>
@@ -44,6 +48,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Loan Type<span class="text-danger">*</span></label>
@@ -63,6 +68,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Payment Type<span class="text-danger">*</span></label>
@@ -80,6 +86,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Percentage -(%)<span class="text-danger">*</span></label>
@@ -93,6 +100,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>No of Month<span class="text-danger">*</span></label>
@@ -106,6 +114,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Amount<span class="text-danger">*</span></label>
@@ -133,6 +142,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label>Description</label>
@@ -146,6 +156,7 @@
                                     </p>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="form-group" align="right">
@@ -156,11 +167,10 @@
                 </div>
                 
                 <div class="col-md-6">
-                    <br>
-                    <h5>Total Payable :- Rs. <span id="total_payable">0.00</span></h5>
-                    <br>
+                    <br><h5>Total Payable :- Rs. <span id="total_payable">0.00</span></h5><br>
                     <h5>Payments :-</h5>
                     <div class="row">
+
                         <div class="table-responsive">
                             <table class="table border text-nowrap text-md-nowrap table-striped">
                                 <thead>
@@ -200,7 +210,7 @@
 @section('scripts')
 <!-- INTERNAL SELECT2 JS -->
 <script src="{{asset('assets/plugins/select2/select2.full.min.js')}}"></script>
-{{-- <!-- SELECT2 JS --> --}}
+<!-- SELECT2 JS --> 
 <script src="{{ asset('assets/js/formelementadvnced.js') }}"></script>
 
 <script>
