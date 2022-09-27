@@ -103,19 +103,20 @@
             text-align: end;
         }
 
-        tbody tr:nth-child(3) td {
+        tbody tr:nth-child(4) td {
             color: #000;
             font-weight: 600
         }
 
-        tbody tr:nth-child(4) td {
+        tbody tr:nth-child(5) td {
             color: #000;
             height: 30px;
             font-weight: 600
         }
+
         span {
-                text-align: center;
-                font-size: 12px;
+            text-align: center;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -123,9 +124,7 @@
 <body>
     <div class="contant">
         <div class="header">
-            <div><img
-                    src="https://w7.pngwing.com/pngs/799/755/png-transparent-loan-money-bank-finance-for-business-bank-blue-payment-logo.png"
-                    alt="" style="width:58%;height:auto;"></div>
+            <div>${$('#image').html()}</div>
             <div>${name}</div>
             <div>${phoneNumber}</div>
         </div>
@@ -144,15 +143,17 @@
             <tbody>
                 <tr>
                     <td>Loan Amount</td>
-                    <td>${loan_amount}</td>
+                    <td>Rs. ${loan_amount}</td>
                 </tr>
                 <tr>
                     <td>Payed Amount</td>
-                    <td>${payment_amount}</td>
+                    <td>Rs. ${payment_amount}</td>
                 </tr>
+                <tr></tr>
+
                 <tr>
                     <td>Total Payed</td>
-                    <td>${tillTotalPay}</td>
+                    <td>Rs. ${tillTotalPay}</td>
                 </tr>
                 <tr>
                     <td>Payment Mode</td>
@@ -160,9 +161,11 @@
                 </tr>
             </tbody>
         </table>
-        <div class="bottom">Thank You ..!</div>
-        <span>technical solutions - sobiztech (pvt) ltd</span>
-</div>
+        <div class="bottom">
+            Thank You ..!
+        </div>
+        <span>${footerMassage}</span>
+    </div>
 </body>
 
 </html>

@@ -145,51 +145,40 @@
 
 <script>
     $(document).ready(function() {
-
         // show model back end validate
         if (!@json($errors -> isEmpty())) {
             $('#createModal').modal('show');
-
             var id = $('#id').val();
-
             if (id == 0) {
                 $('#createFormModal').html('Create Black List');
             } else {
                 $('#createFormModal').html('Update Black List');
             }
         }
-
         // create
         $('#create_').click(function() {
             $("#id").val(0);
             $("#customer_id").val('');
             $("#black_list_type_id").val('');
-
             $('#createFormModal').html('Create Black List');
             $('p').html('');
-
             $('#createModal').modal('show');
         });
-
         // update
         $('.edit').click(function() {
             $("#id").val($(this).attr('data-id'));
             $("#customer_id").val($(this).attr('data-customer_id'));
             $("#black_list_type_id").val($(this).attr('data-black_list_type_id'));
-
             $('#createFormModal').html('Update Black List');
             $('p').html('');
-
             $('#createModal').modal('show');
         });
-
         // delete
         $('.delete').click(function() {
             console.log("HOO");
             var id = $(this).attr('data-id');
             var url = $(this).attr('data-url');
             console.log(url);
-
             swal({
                     title: 'Are you sure?',
                     text: 'Remove Customer From Black List !',
@@ -221,10 +210,8 @@
                     }
                 });
             // $("#id").val($(this).attr('data-id'));
-
             // $('#createFormModal').html('Update Black List');
             // $('p').html('');
-
             // $('#createModal').modal('show');
         });
     });

@@ -39,6 +39,12 @@ class LoansController extends Controller
                 'customers.phone_number',
             )
             ->where('customers.is_active', 1)
+            ->whereNotExists(function ($query){
+                $query->select(DB::raw(1))
+                    ->from('loans')
+                    ->where('loans.loan_status', 0) // loan not finesh
+                    ->whereColumn('loans.customer_id', 'customers.id');
+            })
             ->get();
 
         $loan_types = DB::table('loan_types')->get();
