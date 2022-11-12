@@ -50,6 +50,7 @@ class LoansController extends Controller
 
     public function store(Request $request)
     {
+        //return $request;
 
         $getExtaData = $this->getLoanPaymentDetailAjax($request);
         $total_payable = str_replace(',', '', $getExtaData['total_payable']);
@@ -90,7 +91,7 @@ class LoansController extends Controller
             $loan = loans::find($id);
         }
 
-        try {
+        // try {
 
             $loan->date = $request->input('date');
             $loan->customer_id = $request->input('customer_id');
@@ -108,10 +109,10 @@ class LoansController extends Controller
 
             return redirect()->route('loan.index')->with('success', 'loan ....');
 
-        } catch (\Throwable $th) {
+        // } catch (\Throwable $th) {
 
-            return redirect()->route('loan.index')->with('error', 'error ....');
-        }
+        //     return redirect()->route('loan.index')->with('error', 'error ....');
+        // }
 
     }
 
