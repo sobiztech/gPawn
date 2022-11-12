@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('loan_status')->default(0);
             $table->decimal('schedule_payment_amount',10,2)->default(0.00);
             $table->date('loan_end_date');
-            $table->date('finished_at');
+            $table->date('finished_at')->nullable();
             $table->integer('emp_id')->unsigned();
             $table->longText('description')->nullable();
             $table->timestamps();
